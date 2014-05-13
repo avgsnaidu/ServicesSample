@@ -70,4 +70,22 @@ namespace VirtusDataModel
     }
 
 
+    public class DeadLineExtensionActionData
+    {
+
+        public int ID { get; set; }
+        public int TaskId { get; set; }
+        public int Duration { get; set; }
+
+        public string CreatedBy { get; set; }
+        public string Reason { get; set; }
+        public string Flag { get; set; }
+
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTill { get; set; }
+        public DateTime CreatedOn { get; set; }
+    }
+
+
+
 }

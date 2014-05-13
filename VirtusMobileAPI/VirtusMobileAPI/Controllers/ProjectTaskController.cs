@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using VirtusBI;
 using VirtusDataModel;
+using VirtusMobileService.Models;
 
 namespace VirtusMobileAPI.Controllers
 {
@@ -16,7 +18,7 @@ namespace VirtusMobileAPI.Controllers
         clsTasksProcessedBy processedRepository = new clsTasksProcessedBy();
         clsTaskMilestones mileStoneRepository = new clsTaskMilestones();
         clsDeadlineExtension deadlineRepository = new clsDeadlineExtension();
-           
+
 
         [ActionName("GetParentTaskId")]
         [Route("GetParentTaskId/{TaskId}")]
@@ -273,14 +275,14 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [Route("GetProjectTaskProcessedBy")]
+        [Route("GetProjectTaskProcessedBy/{recordId}/{objectType}")]
         public HttpResponseMessage GetProjectTaskProcessedBy(string recordId, int objectType)
         {
             var result = processedRepository.GetTaskProcessedBy(recordId, objectType);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
-        [Route("GetProjectTaskProcessedByAddress")]
+        [Route("GetProjectTaskProcessedByAddress/{recordId}/{objectType}")]
         public HttpResponseMessage GetProjectTaskProcessedByAddress(string recordId, int objectType)
         {
             var result = processedRepository.GetProcessedByAddresses(recordId, objectType);
@@ -291,7 +293,20 @@ namespace VirtusMobileAPI.Controllers
 
         //Deadline Extensions
 
-
+        [Route("SaveProjectTaskDeadLines/{recordId}/{loginName}")]
+        public HttpResponseMessage SaveProjectDeadLines(DeadLineExtensionActionData data, string recordId, string loginName)
+        {
+            try
+            {
+                DataTable dt = ConverterHelper.ConvertToDataTable<DeadLineExtensionActionData>(new List<DeadLineExtensionActionData> { data });
+                var result = deadlineRepository.SaveDeadlines(dt, recordId, loginName);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while Saving. - " + ex.Message);
+            }
+        }
 
 
 
