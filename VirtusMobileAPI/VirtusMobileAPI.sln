@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtusDB", "VirtusDB\VirtusDB.csproj", "{AE2BAE44-7ED7-4F69-A666-132547B96AB4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15306488-AF1D-463B-8777-56605E5C2E9A} = {15306488-AF1D-463B-8777-56605E5C2E9A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtusBI", "VirtusBI\VirtusBI.csproj", "{196222AA-D885-43A5-ACC9-7CD66EF01609}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE2BAE44-7ED7-4F69-A666-132547B96AB4} = {AE2BAE44-7ED7-4F69-A666-132547B96AB4}
+		{15306488-AF1D-463B-8777-56605E5C2E9A} = {15306488-AF1D-463B-8777-56605E5C2E9A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtusDataModel", "VirtusDataModel\VirtusDataModel.csproj", "{15306488-AF1D-463B-8777-56605E5C2E9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtusMobileAPI", "VirtusMobileAPI\VirtusMobileAPI.csproj", "{0D311D2D-4913-43CF-AF4C-21E5089F1F3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15306488-AF1D-463B-8777-56605E5C2E9A} = {15306488-AF1D-463B-8777-56605E5C2E9A}
+		{196222AA-D885-43A5-ACC9-7CD66EF01609} = {196222AA-D885-43A5-ACC9-7CD66EF01609}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE2BAE44-7ED7-4F69-A666-132547B96AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2BAE44-7ED7-4F69-A666-132547B96AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2BAE44-7ED7-4F69-A666-132547B96AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2BAE44-7ED7-4F69-A666-132547B96AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{196222AA-D885-43A5-ACC9-7CD66EF01609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{196222AA-D885-43A5-ACC9-7CD66EF01609}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{196222AA-D885-43A5-ACC9-7CD66EF01609}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{196222AA-D885-43A5-ACC9-7CD66EF01609}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15306488-AF1D-463B-8777-56605E5C2E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15306488-AF1D-463B-8777-56605E5C2E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15306488-AF1D-463B-8777-56605E5C2E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15306488-AF1D-463B-8777-56605E5C2E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D311D2D-4913-43CF-AF4C-21E5089F1F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D311D2D-4913-43CF-AF4C-21E5089F1F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D311D2D-4913-43CF-AF4C-21E5089F1F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D311D2D-4913-43CF-AF4C-21E5089F1F3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
