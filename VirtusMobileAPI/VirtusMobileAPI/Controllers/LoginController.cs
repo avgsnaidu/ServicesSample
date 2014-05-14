@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using VirtusBI;
-using VirtusDataModel;
 
 namespace VirtusMobileAPI.Controllers
 {
@@ -67,34 +64,40 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
+
+        [HttpGet]
         [Route("CheckUserName/{UserName}")]
         public HttpResponseMessage CheckUserName(string UserName)
         {
             bool isWindowsPassword = default(bool);
-            bool result = repository.fnCheckUserName(UserName, ref isWindowsPassword);
-            LoginUserNameExist obj = new LoginUserNameExist();
-            obj.IsUserDetailsExists = result;
-            obj.IsWindowsPassword = isWindowsPassword;
-            return Request.CreateResponse(HttpStatusCode.OK, obj, Configuration.Formatters.JsonFormatter);
+            bool isUserExists = repository.fnCheckUserName(UserName, ref isWindowsPassword);
+            //LoginUserNameExist obj = new LoginUserNameExist();
+            //obj.IsUserDetailsExists = result;
+            //obj.IsWindowsPassword = isWindowsPassword;
+
+            var result = new { IsUserDetailsExists = isUserExists };
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
 
         }
 
-
-        [Route("SaveCurrentLogin/{LoginUserId}/{IpAddress}/{WindowsUser}")]
-        public HttpResponseMessage SaveCurrentLoginDetails(int LoginUserId, string IpAddress, string WindowsUser)
+        [HttpPost]
+        [AcceptVerbs("GET", "POST")]
+        [Route("SaveCurrentUserDetails/{userId}/{ipAddress}/{windowsUser}")]
+        public HttpResponseMessage SaveCurrentLoginDetails(string userId, string ipAddress, string windowsUser)
         {
             try
             {
-                repository.fnSaveCurrentLoginDeatils(LoginUserId, IpAddress, WindowsUser);
+                repository.fnSaveCurrentLoginDeatils(Convert.ToInt32(userId), ipAddress, windowsUser);
                 return Request.CreateResponse(HttpStatusCode.OK, "Inserted", Configuration.Formatters.JsonFormatter);
-
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, "Error while inserting..", Configuration.Formatters.JsonFormatter);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error while inserting..");
 
             }
         }
+
+
 
 
 
