@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.ValueProviders;
 using System.Web.Http.ValueProviders.Providers;
+using VirtusMobileAPI.Models;
 
 namespace VirtusMobileAPI
 {
@@ -24,6 +25,9 @@ namespace VirtusMobileAPI
 
             //config.Formatters.Insert(0, new MultiFormDataMediaTypeFormatter());
             config.Services.Replace(typeof(ValueProviderFactory), new RouteDataValueProviderFactory());
+
+
+            config.Filters.Add(new UnhandledExceptionFilter());
         }
     }
 }

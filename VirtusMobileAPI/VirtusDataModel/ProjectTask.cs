@@ -86,6 +86,28 @@ namespace VirtusDataModel
         public DateTime CreatedOn { get; set; }
     }
 
+    public class ProjectTaskProcessedByActionData
+    {
+        public int ID { get; set; }
+        public int ObjectType { get; set; }
+        public int ObjectId { get; set; }
+        public string TaskFunctionId { get; set; }
 
+
+        public string PerformedBy { get; set; }
+        public decimal ExternalRate { get; set; }
+        public string Flag { get; set; }
+
+        public bool Allow { get; set; }
+        public bool Remind { get; set; }
+
+
+
+        public DateTime RemindFrom { get; set; }
+        public DateTime RemindTo { get; set; }
+     
+
+
+    }
 
 }

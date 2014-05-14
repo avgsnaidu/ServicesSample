@@ -1222,6 +1222,101 @@ namespace VirtusBI
             }
         }
 
+        public bool SaveNewDeadlineEntry(string dtFrom, string dtTill, string sId, string sUser)
+        {
+            //User can save a deadline entry being in general tab.
+            //The procedure inserts a new deadline entry if the From and TillDate value combination is 
+            // not found in task deadlines.
+
+            long lngFromDate = 0;
+            long lngToDate = 0;
+            if (dtFrom != "")
+                lngFromDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtFrom), FirstDayOfWeek.System, FirstWeekOfYear.System);
+
+            if (dtTill != "")
+                lngToDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtTill), FirstDayOfWeek.System, FirstWeekOfYear.System);
+
+            string strSQL = "";
+
+            try
+            {
+                if (dtFrom == "" && dtTill != "")
+                    strSQL = "Select RecordId from TaskDeadLines where DateFrom is null and DateTill=cast(" + lngToDate + " as datetime) And TaskId=" + sId;
+                else if (dtFrom != "" && dtTill == "")
+                    strSQL = "Select RecordId from TaskDeadLines where DateFrom =cast(" + lngFromDate + "as datetime) and DateTill is null And TaskId=" + sId;
+                else if (dtFrom != "" && dtTill != "")
+                    strSQL = "Select RecordId from TaskDeadLines where DateFrom =cast(" + lngFromDate + "as datetime) and DateTill=cast(" + lngToDate + "as datetime) And TaskId=" + sId;
+
+                string sRecId = Common.dbMgr.ExecuteScalar(CommandType.Text, strSQL);
+                if (sRecId != null && sRecId != "")
+                {
+                    //deadline already exists with this combination.
+                    //as modification is made to this presently, move this as the latest deadline.
+                    strSQL = "Update TaskDeadlines Set CreatedOn=getdate() Where RecordId=" + sRecId;
+                    Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
+                }
+                else
+                {
+                    strSQL = "Insert into TaskDeadlines(TaskId,DateFrom,DateTill,CreatedBy,CreatedOn)";
+                    strSQL += " values(" + sId + ",";
+
+                    if (lngFromDate == 0)
+                        strSQL += "Null,";
+                    else
+                        strSQL += "cast(" + lngFromDate.ToString() + " as datetime),";
+
+                    if (lngToDate == 0)
+                        strSQL += "Null,";
+                    else
+                        strSQL += "cast(" + lngToDate.ToString() + " as datetime),";
+
+                    strSQL += Common.EncodeNString(sUser) + ",";
+                    strSQL += "getdate())";
+                    Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public void fnGetTenderOrContractId(int iTaskId, string strUserName, ref int iObjeTypeId, ref int iObjectId)
+        {
+            try
+            {
+
+                SqlParameter[] Params = new SqlParameter[4];
+                int iIndex = 0;
+
+                Params[iIndex] = new SqlParameter("@TaskID", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iTaskId;
+
+                Params[++iIndex] = new SqlParameter("@LoginUserName", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strUserName;
+
+                Params[++iIndex] = new SqlParameter("@ObjectTypeId", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Output;
+
+                Params[++iIndex] = new SqlParameter("@ObjectId", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Output;
+
+
+                Common.dbMgr.ExecuteNonQuery(CommandType.StoredProcedure, "spGetCurrentProjectTenderOrContractId", Params);
+                iObjeTypeId = int.Parse(Params[iIndex - 1].Value.ToString());
+                iObjectId = int.Parse(Params[iIndex].Value.ToString());
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
@@ -1325,6 +1420,129 @@ namespace VirtusBI
                 throw ex;
             }
         }
+
+
+        public bool SaveTaskProcessedBy(DataTable dtTaskProcessedBy, int ObjType, string sRecordID)
+        {
+            try
+            {
+
+                int i;
+                string strSQL = "";
+                string strAllow = "";
+                string strRemind = "";
+                long lngDate = 0;
+                if (dtTaskProcessedBy.Rows.Count > 0)
+                {
+                    for (i = 0; i < dtTaskProcessedBy.Rows.Count; i++)
+                    {
+                        if (dtTaskProcessedBy.Rows[i]["Allow"] == DBNull.Value)
+                            strAllow = "0";
+                        else if ((bool)dtTaskProcessedBy.Rows[i]["Allow"] == true)
+                            strAllow = "1";
+                        else
+                            strAllow = "0";
+
+                        if (dtTaskProcessedBy.Rows[i]["Remind"] == DBNull.Value)
+                            strRemind = "0";
+                        else if ((bool)dtTaskProcessedBy.Rows[i]["Remind"] == true)
+                            strRemind = "1";
+                        else
+                            strRemind = "0";
+
+
+                        if (dtTaskProcessedBy.Rows[i]["Flag"].ToString() == "N")
+                        {
+                            strSQL = "Insert into ProcessedBy(ObjectType,ObjectId,TaskFunctionId,PerformedBy,ExternalRate,Allow,Remind,RemindFrom,RemindTo)";
+                            strSQL += " values(" + ObjType.ToString() + "," + sRecordID + ",";
+                            strSQL += Common.EncodeString(dtTaskProcessedBy.Rows[i]["TaskFunctionId"].ToString()) + ",";
+                            strSQL += Common.EncodeString(dtTaskProcessedBy.Rows[i]["PerformedBy"].ToString()) + ",";
+
+                            if (dtTaskProcessedBy.Rows[i]["ExternalRate"] != DBNull.Value)
+                                strSQL += Common.EncodeValue((decimal)dtTaskProcessedBy.Rows[i]["ExternalRate"]) + ",";
+                            else
+                                strSQL += "Null,";
+
+                            strSQL += strAllow + ",";
+                            strSQL += strRemind + ",";
+
+                            if (dtTaskProcessedBy.Rows[i]["RemindFrom"] != DBNull.Value)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtTaskProcessedBy.Rows[i]["RemindFrom"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            else
+                                lngDate = 0;
+
+                            if (lngDate == 0)
+                                strSQL += "Null,";
+                            else
+                                strSQL += "cast(" + lngDate.ToString() + " as datetime),";
+
+                            if (dtTaskProcessedBy.Rows[i]["RemindTo"] != DBNull.Value)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtTaskProcessedBy.Rows[i]["RemindTo"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            else
+                                lngDate = 0;
+
+                            if (lngDate == 0)
+                                strSQL += "Null)";
+                            else
+                                strSQL += "cast(" + lngDate.ToString() + " as datetime))";
+
+                            Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
+                        }
+                        else if (dtTaskProcessedBy.Rows[i]["Flag"].ToString() == "M")
+                        {
+                            strSQL = "Update ProcessedBy Set ObjectType=" + ObjType.ToString() + ",";
+                            strSQL += "ObjectId=" + sRecordID + ",";
+                            strSQL += "TaskFunctionId=" + Common.EncodeString(dtTaskProcessedBy.Rows[i]["TaskFunctionId"].ToString()) + ",";
+                            strSQL += "PerformedBy=" + Common.EncodeString(dtTaskProcessedBy.Rows[i]["PerformedBy"].ToString()) + ",";
+
+                            if (dtTaskProcessedBy.Rows[i]["ExternalRate"] != DBNull.Value)
+                                strSQL += " ExternalRate=" + Common.EncodeValue((decimal)dtTaskProcessedBy.Rows[i]["ExternalRate"]) + ",";
+                            else
+                                strSQL += " ExternalRate=Null,";
+
+                            strSQL += "Allow=" + strAllow + ",";
+                            strSQL += "Remind=" + strRemind + ",";
+
+                            if (dtTaskProcessedBy.Rows[i]["RemindFrom"] != DBNull.Value)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtTaskProcessedBy.Rows[i]["RemindFrom"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            else
+                                lngDate = 0;
+
+                            if (lngDate == 0)
+                                strSQL += "RemindFrom=Null,";
+                            else
+                                strSQL += "RemindFrom=cast(" + lngDate.ToString() + " as datetime),";
+
+                            if (dtTaskProcessedBy.Rows[i]["RemindTo"] != DBNull.Value)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dtTaskProcessedBy.Rows[i]["RemindTo"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            else
+                                lngDate = 0;
+
+                            if (lngDate == 0)
+                                strSQL += "RemindTo=Null ";
+                            else
+                                strSQL += "RemindTo=cast(" + lngDate.ToString() + " as datetime) ";
+
+                            strSQL += " Where RecordId=" + dtTaskProcessedBy.Rows[i]["ID"].ToString();
+                            Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
+                        }
+                        else if (dtTaskProcessedBy.Rows[i]["Flag"].ToString() == "D")
+                        {
+                            strSQL = "Delete from ProcessedBy where ";
+                            strSQL += "RecordId=" + Common.EncodeString(dtTaskProcessedBy.Rows[i]["ID"].ToString());
+
+                            Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
 
     }
@@ -1499,7 +1717,7 @@ namespace VirtusBI
                 throw ex;
             }
         }
-        
+
     }
 
 

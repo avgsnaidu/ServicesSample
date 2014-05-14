@@ -221,6 +221,26 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
+        [Route("GetProjectTaskTenderOrContractId/{recordId}/{loginName}")]
+        public HttpResponseMessage GetProjectTaskTenderOrContractId(int recordId, string loginName)
+        {
+            int objectTypeId = default(int);
+            int objectId = default(int);
+            try
+            {
+                repository.fnGetTenderOrContractId(recordId, loginName, ref objectTypeId, ref objectId);
+                var result = new { ObjectTypeId = objectTypeId, ObjectId = objectId };
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error while getting data. - " + ex.Message);
+            }
+        }
+
+
+
+
 
         [HttpPost]
         [Route("SaveProjectTask/{recordId}/{childTasksForUseSepcialRights}/{childDecisionsForUseSpecialRights}")]
@@ -246,6 +266,8 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
+
+
         [HttpPost]
         [Route("DeleteProjectGroupDetails/{ProjectId}")]
         public HttpResponseMessage DeleteGroupProjectDetailsData(string ProjectId)
@@ -260,6 +282,21 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while Deleting.");
             }
 
+        }
+
+        [HttpPost]
+        [Route("SaveProjectTaskDeadLine/{fromDate}/{toDate}/{recordId}/{loginName}")]
+        public HttpResponseMessage SaveProjectDeadLines(string fromDate, string toDate, string recordId, string loginName)
+        {
+            try
+            {
+                var result = repository.SaveNewDeadlineEntry(fromDate, toDate, recordId, loginName);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while Saving. - " + ex.Message);
+            }
         }
 
 
@@ -289,12 +326,46 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+        [HttpPost]
+        [Route("SaveProcessedBy/{recordId}/{objectType}")]
+        public HttpResponseMessage SaveProjectProcessedBy([FromBody]ProjectTaskProcessedByActionData data, string recordId, int objectType)
+        {
+            try
+            {
+                DataTable dt = ConverterHelper.ConvertToDataTable<ProjectTaskProcessedByActionData>(new List<ProjectTaskProcessedByActionData> { data });
+                var result = processedRepository.SaveTaskProcessedBy(dt, objectType, recordId);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while Saving. - " + ex.Message);
+            }
+        }
+
+
 
 
         //Deadline Extensions
 
-        [Route("SaveProjectTaskDeadLines/{recordId}/{loginName}")]
-        public HttpResponseMessage SaveProjectDeadLines(DeadLineExtensionActionData data, string recordId, string loginName)
+        [Route("GetDeadLineExtension/{recordId}")]
+        public HttpResponseMessage GetProjectDeadLineExtension(string recordId)
+        {
+            try
+            {
+                var result = deadlineRepository.GetDeadlineExtn(recordId);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while getting data. - " + ex.Message);
+            }
+        }
+
+
+
+        [HttpPost]
+        [Route("SaveDeadLineExtension/{recordId}/{loginName}")]
+        public HttpResponseMessage SaveProjectDeadLineExtensions([FromBody]DeadLineExtensionActionData data, string recordId, string loginName)
         {
             try
             {
@@ -307,9 +378,6 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Error Occured while Saving. - " + ex.Message);
             }
         }
-
-
-
 
 
     }

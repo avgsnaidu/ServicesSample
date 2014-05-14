@@ -95,8 +95,9 @@ namespace VirtusBI
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    if ((ds.Tables[0].Rows[0]["UseWindowsPassword"] != null) && (ds.Tables[0].Rows[0]["UseWindowsPassword"].ToString() != ""))
-                        bIsWindowsPassword = Convert.ToBoolean(ds.Tables[0].Rows[0]["UseWindowsPassword"]);
+                    //if ((ds.Tables[0].Rows[0]["UseWindowsPassword"] != null) && (ds.Tables[0].Rows[0]["UseWindowsPassword"].ToString() != ""))
+                    //    bIsWindowsPassword = Convert.ToBoolean(ds.Tables[0].Rows[0]["UseWindowsPassword"]);
+                    bIsWindowsPassword = false;
 
                     if ((ds.Tables[0].Rows[0]["AutoLogin"] != null) && (ds.Tables[0].Rows[0]["AutoLogin"].ToString() != ""))
                         bIsAutologin = Convert.ToBoolean(ds.Tables[0].Rows[0]["AutoLogin"]);
