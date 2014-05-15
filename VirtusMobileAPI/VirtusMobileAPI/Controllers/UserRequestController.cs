@@ -127,7 +127,6 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
-
         [ActionName("GetRequestComponentOnDepartment")]
         [Route("VirtusApi/UserRequest/GetRequestComponentBasedOnDepartment/{RequestTypeId}/{departmentId}")]
         public HttpResponseMessage GetRequestComponentBasedOnDepartment(int RequestTypeId, int departmentId)
@@ -148,7 +147,7 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SetReadStatusRequest")]
         [Route("VirtusApi/UserRequest/SetReadStaus/{loginName}/{reqeuestId}")]
         public HttpResponseMessage SetReadStatusRequest(string loginName, int reqeuestId)
@@ -164,11 +163,26 @@ namespace VirtusMobileAPI.Controllers
         public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]UserRequestActionData data)
         {
             bool bSuccess = default(bool);
-            int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
-            return Request.CreateResponse(HttpStatusCode.OK, iRecordId, Configuration.Formatters.JsonFormatter);
+            try
+            {
+                repository.BeginTrans();
+                int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
 
+                if (!bSuccess)
+                {
+                    repository.RollbackTrans();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, new { RecordId = iRecordId, IsSavedSucessfully = bSuccess }, Configuration.Formatters.JsonFormatter);
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved");
+            }
         }
 
+        
 
 
 

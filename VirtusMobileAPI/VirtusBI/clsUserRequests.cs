@@ -11,7 +11,7 @@ using VirtusDataModel;
 
 namespace VirtusBI
 {
-    public class clsUserRequests
+    public class clsUserRequests : clsBaseBI
     {
         public clsUserRequests()
         {
@@ -1176,7 +1176,6 @@ namespace VirtusBI
             catch (Exception ex)
             { throw ex; }
         }
-
 
         public DataSet fnGetProjectComponents(int OrginalRequestId, bool bIsMaintanaceRequest)
         {
