@@ -24,7 +24,7 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
             else
                 return Request.CreateResponse(HttpStatusCode.NotFound, result, Configuration.Formatters.JsonFormatter);
-                
+
             //return result;
         }
 
@@ -97,19 +97,18 @@ namespace VirtusMobileAPI.Controllers
 
         [ActionName("GetReportingToPersonName")]
         [Route("VirtusApi/UserRequest/GetReportingToName/{loginId}")]
-        public string GetReportingToPersonName(int loginId)
+        public HttpResponseMessage GetReportingToPersonName(int loginId)
         {
             string reportingTo = repository.fnGetReportingToNames(loginId);
-            return reportingTo;
+            return Request.CreateResponse(HttpStatusCode.OK, reportingTo, Configuration.Formatters.JsonFormatter);
         }
 
         [ActionName("GetIsLoginNameExists")]
         [Route("VirtusApi/UserRequest/GetIsLoginNameExists/{loginName}/{reqeuestId}")]
-        public bool GetIsLoginNameExists(string loginName, int reqeuestId)
+        public HttpResponseMessage GetIsLoginNameExists(string loginName, int reqeuestId)
         {
             bool loginNameExists = repository.fnLoginNameExists(loginName, reqeuestId);
-            return loginNameExists;
-            //return Request.CreateResponse(HttpStatusCode.OK, reportingTo, Configuration.Formatters.JsonFormatter);
+            return Request.CreateResponse(HttpStatusCode.OK, loginNameExists, Configuration.Formatters.JsonFormatter);
         }
 
         [ActionName("GetRequestComponent")]
