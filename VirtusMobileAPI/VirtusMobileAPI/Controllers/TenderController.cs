@@ -100,7 +100,7 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("UpdateContractVendors")]
         [Route("VirtusApi/Tender/UpdateContractVendors/{recordId}")]
         public HttpResponseMessage UpdateContractVendors(int recordId)
@@ -113,7 +113,7 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SaveTenderDetails")]
         [Route("VirtusApi/Tender/SaveTender/{recordId}/{IsDesign}")]
         public HttpResponseMessage SaveTenderDetails(int recordId, bool IsDesign, [FromBody]TenderActionData data)
@@ -126,7 +126,7 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SetReadStatus")]
         [Route("VirtusApi/Tender/SetReadStatus/{loginName}/{recordId}/{objectEnumId}")]
         public HttpResponseMessage SetReadStatus(string loginName, int recordId, int objectEnumId)
@@ -138,7 +138,7 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotModified, result, Configuration.Formatters.JsonFormatter);
         }
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SetIsDone")]
         [Route("VirtusApi/Tender/SetIsDone/{recordId}/{IsDone}/{ModifiedBy}")]
         public HttpResponseMessage SetIsDone(string recordId, int IsDone, string ModifiedBy)

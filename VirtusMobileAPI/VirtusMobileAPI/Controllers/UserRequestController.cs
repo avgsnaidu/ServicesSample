@@ -172,6 +172,10 @@ namespace VirtusMobileAPI.Controllers
                 {
                     repository.RollbackTrans();
                 }
+                else
+                {
+                    repository.CommitTrans();
+                }
 
                 return Request.CreateResponse(HttpStatusCode.OK, new { RecordId = iRecordId, IsSavedSucessfully = bSuccess }, Configuration.Formatters.JsonFormatter);
 
@@ -181,8 +185,6 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved");
             }
         }
-
-        
 
 
 
