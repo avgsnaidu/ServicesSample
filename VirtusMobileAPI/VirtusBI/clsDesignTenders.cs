@@ -9,7 +9,7 @@ using VirtusDataModel;
 
 namespace VirtusBI
 {
-    public class clsDesignTenders
+    public class clsDesignTenders:clsBaseBI
     {
 
 

@@ -72,12 +72,21 @@ namespace VirtusMobileAPI.Controllers
         [HttpPost]
         [ActionName("SaveTenderConsultants")]
         [Route("VirtusApi/Tender/SaveTenderConsultants/{designId}")]
-        public HttpResponseMessage SaveTenderConsultants(int designId, [FromBody]List<TenderConsultantActionData> data)
+        public HttpResponseMessage SaveTenderConsultants(int designId, [FromBody]TenderConsultantActionData data)
         {
-            DataTable dt = ConverterHelper.ConvertToDataTable(data);
-            var result = repository.fnSaveConsultants(dt, designId);
-            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            var listData = new List<TenderConsultantActionData>() { data };
 
+            DataTable dt = ConverterHelper.ConvertToDataTable(listData);
+
+            if (dt != null)
+            {
+                var result = repository.fnSaveConsultants(dt, designId);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Please enter valid data");
+            }
         }
 
         [HttpPost]
@@ -118,12 +127,29 @@ namespace VirtusMobileAPI.Controllers
         [Route("VirtusApi/Tender/SaveTender/{recordId}/{IsDesign}")]
         public HttpResponseMessage SaveTenderDetails(int recordId, bool IsDesign, [FromBody]TenderActionData data)
         {
-            bool sucess = default(bool);
-            int insertRecord = repository.fnSave(recordId, IsDesign, ref sucess, data);
-            string str = string.Format(" Record Id : {0} and Saving Sucess is : {1}", insertRecord, sucess);
-            return Request.CreateResponse(HttpStatusCode.OK, str, Configuration.Formatters.JsonFormatter);
+            try
+            {
+                repository.BeginTrans();
+                bool success = default(bool);
+                int insertRecord = repository.fnSave(recordId, IsDesign, ref success, data);
+                string str = string.Format(" Record Id : {0} and Saving Sucess is : {1}", insertRecord, success);
+                if (!success)
+                {
+                    repository.RollbackTrans();
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, str, Configuration.Formatters.JsonFormatter);
 
+                }
+                repository.CommitTrans();
+                return Request.CreateResponse(HttpStatusCode.OK, str, Configuration.Formatters.JsonFormatter);
+
+            }
+            catch (Exception ex)
+            {
+                repository.RollbackTrans();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
+
 
 
         [HttpPost]
@@ -143,12 +169,28 @@ namespace VirtusMobileAPI.Controllers
         [Route("VirtusApi/Tender/SetIsDone/{recordId}/{IsDone}/{ModifiedBy}")]
         public HttpResponseMessage SetIsDone(string recordId, int IsDone, string ModifiedBy)
         {
-            var result = repository.fnSetIsDone(recordId, IsDone, ModifiedBy);
-            if (result)
-                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
-            else
-                return Request.CreateResponse(HttpStatusCode.NotModified, result, Configuration.Formatters.JsonFormatter);
+            try
+            {
+                repository.BeginTrans();
+                var result = repository.fnSetIsDone(recordId, IsDone, ModifiedBy);
+                repository.CommitTrans();
+                if (result)
+                    return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+                else
+                {
+                    repository.RollbackTrans();
+                    return Request.CreateResponse(HttpStatusCode.NotModified, result, Configuration.Formatters.JsonFormatter);
+                }
+            }
+            catch (Exception ex)
+            {
+                repository.RollbackTrans();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
+
+
+
 
 
     }
