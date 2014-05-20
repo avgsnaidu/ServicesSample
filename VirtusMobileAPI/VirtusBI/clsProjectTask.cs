@@ -10,7 +10,7 @@ using VirtusDataModel;
 
 namespace VirtusBI
 {
-    public class clsProjectTask
+    public class clsProjectTask:clsBaseBI
     {
         public string GetParentTaskIds(string sTaskId)
         {

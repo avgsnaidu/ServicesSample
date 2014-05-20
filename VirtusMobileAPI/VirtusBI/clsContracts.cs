@@ -10,7 +10,7 @@ using VirtusDataModel;
 
 namespace VirtusBI
 {
-    public class clsContracts
+    public class clsContracts : clsBaseBI
     {
         public DataSet GetListViewDataSet(string sWhereCondition, string sLoginUserName, bool bUnDone, bool bIsProcessed)
         {
@@ -145,7 +145,7 @@ namespace VirtusBI
 
             try
             {
-                strSql = "Update Contract Set IsDone=" + iIsDone + ",";
+                strSql = "Update Contracts Set IsDone=" + iIsDone + ",";
                 strSql += " ModifiedBy=" + Common.EncodeNString(strModifiedBy) + ",ModifiedOn=getdate()";
                 strSql += " Where DesignId=" + strRecordID;
 
@@ -1394,7 +1394,7 @@ namespace VirtusBI
                 param.Value = iRecordId;
                 Params[++iIndex] = param;
 
-                iResultId = Common.dbMgr.ExecuteNonQuery(CommandType.StoredProcedure, "spPMObjectRight", Params);
+                iResultId = Common.dbMgr.ExecuteNonQuery(CommandType.StoredProcedure, "spSetPMObjectRight", Params);
                 return iResultId;
 
             }
@@ -1403,6 +1403,10 @@ namespace VirtusBI
                 throw ex;
             }
         }
+
+
+
+
 
 
 

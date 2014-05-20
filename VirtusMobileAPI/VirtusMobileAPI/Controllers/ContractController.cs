@@ -14,7 +14,7 @@ namespace VirtusMobileAPI.Controllers
     public class ContractController : ApiController
     {
         clsContracts repository = new clsContracts();
-        [ActionName("GetContractsList")] 
+        [ActionName("GetContractsList")]
         [Route("VirtusApi/Contract/GetContractsList/{LoginUserName}/{IsProcessed}/{IsUnDone}/{WhereCondition}")]
         public HttpResponseMessage GetContractsList(string WhereCondition, string LoginUserName, bool IsProcessed, bool IsUnDone)
         {
@@ -96,10 +96,10 @@ namespace VirtusMobileAPI.Controllers
 
 
         [ActionName("GetIsAccessDenied")]
-        [Route("VirtusApi/Contract/IsAccessDenied/{LoginUserName}/{RecordId}/{ForModify}")]
-        public HttpResponseMessage GetIsAccessDenied(string LoginUserName, string RecordId, bool ForModify)
+        [Route("VirtusApi/Contract/IsAccessDenied/{LoginUserName}/{RecordId}/{IsForModify}")]
+        public HttpResponseMessage GetIsAccessDenied(string LoginUserName, string RecordId, bool IsForModify)
         {
-            var result = repository.IsAccessDenied(LoginUserName, RecordId, ForModify);
+            var result = repository.IsAccessDenied(LoginUserName, RecordId, IsForModify);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
@@ -110,7 +110,7 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnGetCurrencyDetails();
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-         
+
 
 
         [HttpPost]
@@ -118,11 +118,38 @@ namespace VirtusMobileAPI.Controllers
         [Route("VirtusApi/Contract/SaveContract/{RecordId}/{createProject}/{userInitials}/{parentId}")]
         public HttpResponseMessage SaveContractDetails(int RecordId, bool createProject, string userInitials, int parentId, [FromBody]ContractSaveActionData data)
         {
-            DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(new List<MileStoneActionData>() { data.MileStoneActionData });
-            DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(new List<ContractVendorsData> { data.ContractVendorsData });
+            try
+            {
+                if (data.MileStoneActionData == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Milestones data should not be null");
+                }
+                else if (data.ContractVendorsData == null)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Contract vendors data should not be null");
 
-            var result = repository.fnSaveData(RecordId, data.ContractActionData, createProject, dtMileStone, dtContractVendors, userInitials, parentId);
-            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+                DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(new List<MileStoneActionData>() { data.MileStoneActionData });
+                DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(new List<ContractVendorsData> { data.ContractVendorsData });
+
+                repository.BeginTrans();
+
+                if (!repository.fnSaveData(RecordId, data.ContractActionData, createProject, dtMileStone, dtContractVendors, userInitials, parentId))
+                {
+                    repository.RollbackTrans();
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Request Not Saved");
+
+                }
+                else
+                {
+                    repository.CommitTrans();
+                    return Request.CreateResponse(HttpStatusCode.OK, true, Configuration.Formatters.JsonFormatter);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                repository.RollbackTrans();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
 
@@ -137,7 +164,7 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("ChangeContractStatus")]
         [Route("VirtusApi/Contract/ChangeContractStatus/{RecordId}")]
         public HttpResponseMessage ChangeContractStatus(int RecordId)
@@ -147,7 +174,7 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SetIsContractDone")]
         [Route("VirtusApi/Contract/SetIsDone/{RecordId}/{IsDone}/{ModifiedBy}")]
         public HttpResponseMessage SetIsContractDone(string RecordId, int IsDone, string ModifiedBy)
@@ -157,7 +184,7 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("SetReadStatusObject")]
         [Route("VirtusApi/Contract/SetReadStatus/{RecordId}/{ObjectEnumId}/{LoginName}")]
         public HttpResponseMessage SetReadStatusObject(int RecordId, int ObjectEnumId, string LoginName)
