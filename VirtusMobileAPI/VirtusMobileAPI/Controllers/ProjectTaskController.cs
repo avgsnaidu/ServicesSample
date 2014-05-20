@@ -35,6 +35,26 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+
+
+
+        [Route("GetMyWorkPlaceWhereCondition/{IsProjectList}/{loginUserId}")]
+        public HttpResponseMessage GetMyWorkPlaceWhereCondition(bool IsProjectList, string loginUserId)
+        {
+            var result = repository.GetWorkPlaceWhereCondition(IsProjectList, loginUserId);
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+        }
+
+
+        [Route("GetProjectTasksList/{whereCondition}/{IsProject}/{NoOfRecords}/{IsHasViewRight}/{loginUserName}")]
+        public HttpResponseMessage GetListViewDataSet(string whereCondition, bool IsProject, int NoOfRecords, bool IsHasViewRight, string loginUserName)
+        {
+            int TotalCount = default(int);
+            var ProjectsOrTasksList = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(whereCondition), IsProject, "", NoOfRecords, "", "", ConverterHelper.CheckSingleQuote(loginUserName), ref TotalCount, IsHasViewRight);
+            return Request.CreateResponse(HttpStatusCode.OK, new { ProjectsOrTasksList, TotalCount }, Configuration.Formatters.JsonFormatter);
+        }
+
+
         [Route("GetProjectTask/{taskId}")]
         public HttpResponseMessage GetProjectTaskDetails(string taskId)
         {
@@ -49,10 +69,10 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
-        [Route("GetMilestonesOrProjectManager/{projectId}/{IsPorject}/{IsDone}")]
-        public HttpResponseMessage GetProjectUserRequestId(int projectId, bool IsProject, bool IsDone)
+        [Route("GetProjectManagerOrMileStones/{isProject}/{projectId}/{isDone}")]
+        public HttpResponseMessage GetMilestonesOrProjectManager(bool isProject, string projectId, bool isDone)
         {
-            var result = repository.fnGetMilestonesOrProjectManagers(IsProject, projectId, IsDone);
+            var result = repository.fnGetMilestonesOrProjectManagers(isProject, Convert.ToInt32(projectId), isDone);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
@@ -120,7 +140,7 @@ namespace VirtusMobileAPI.Controllers
         [Route("GetIsContributionExceeds/{contribution}/{mileStoneId}/{recordId}")]
         public HttpResponseMessage GetIsContributionExceeds(string contribution, int mileStoneId, string recordId)
         {
-            var result = repository.fnIsContributionExceeds(contribution, mileStoneId, recordId);
+            var result = repository.fnIsContributionExceeds(ConverterHelper.CheckSingleQuote(contribution), mileStoneId, recordId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
@@ -251,17 +271,30 @@ namespace VirtusMobileAPI.Controllers
             string childTaskIdsTobeOpened = string.Empty;
             string childDecisionIdsTobeOpened = string.Empty;
 
-
-            string record = repository.fnSave(recordId, data, ref IsSuccess, ref parentIdsTobeOpened, ref childTaskIdsTobeOpened, ref childDecisionIdsTobeOpened, childTasksForUseSepcialRights, childDecisionsForUseSpecialRights);
-
-            if (IsSuccess)
+            try
             {
-                var result = new { RecordId = record, SavedSuccessfully = IsSuccess, ParentIdsTobeOpened = parentIdsTobeOpened, ChildTaskIdsTobeOpened = childTaskIdsTobeOpened, ChildDecisionIdsTobeOpened = childDecisionIdsTobeOpened };
-                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
-            }
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Some Error while Saving Data");
+                repository.BeginTrans();
 
+                string record = repository.fnSave(recordId, data, ref IsSuccess, ref parentIdsTobeOpened, ref childTaskIdsTobeOpened, ref childDecisionIdsTobeOpened, ConverterHelper.CheckSingleQuote(childTasksForUseSepcialRights), ConverterHelper.CheckSingleQuote(childDecisionsForUseSpecialRights));
+
+                if (IsSuccess)
+                {
+                    var result = new { RecordId = record, SavedSuccessfully = IsSuccess, ParentIdsTobeOpened = parentIdsTobeOpened, ChildTaskIdsTobeOpened = childTaskIdsTobeOpened, ChildDecisionIdsTobeOpened = childDecisionIdsTobeOpened };
+                    repository.CommitTrans();
+                    return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+                }
+                else
+                {
+                    repository.RollbackTrans();
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Some Error while Saving Data");
+                }
+            }
+            catch (Exception ex)
+            {
+                repository.RollbackTrans();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+
+            }
 
 
         }

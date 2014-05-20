@@ -208,6 +208,99 @@ namespace VirtusBI
             { throw ex; }
         }
 
+        public DataSet GetListViewDataSet(string sWhereCondition, bool bIsProject, string strSearchCondition, int iNoOfRecords, string strOrderBy, string strSortOrder, string sLoginUserName, ref int iTotCount, bool bProjectViewRights)
+        {
+            try
+            {
+                iTotCount = 0;
+                SqlParameter[] Params = new SqlParameter[10];
+                int iIndex = 0;
+
+                Params[iIndex] = new SqlParameter("@IsProject", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bIsProject;
+
+                Params[++iIndex] = new SqlParameter("@WhereCondition", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = sWhereCondition;
+
+                Params[++iIndex] = new SqlParameter("@SearchCondition", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strSearchCondition;
+
+                Params[++iIndex] = new SqlParameter("@NoTopRecords", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iNoOfRecords;
+
+                Params[++iIndex] = new SqlParameter("@OrderBy", SqlDbType.VarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strOrderBy;
+
+                Params[++iIndex] = new SqlParameter("@SortOrder", SqlDbType.VarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strSortOrder;
+
+                Params[++iIndex] = new SqlParameter("@LoginName", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = sLoginUserName;
+
+                Params[++iIndex] = new SqlParameter("@UILanguageId", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = CommonVariable.iLanguageId;
+
+                Params[++iIndex] = new SqlParameter("@ProjectViewRights", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bProjectViewRights;
+
+                Params[++iIndex] = new SqlParameter("@TotCount", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Output;
+
+
+                DataSet ds = Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetTaskListViewDS", Params);
+                iTotCount = int.Parse(Params[iIndex].Value.ToString());
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public DataSet GetListViewDataSet(string sWhereCondition, bool bIsProject, string sLoginUserName, bool bProjectViewRights)
+        {
+            try
+            {
+                int iTotCount = 0;
+                return GetListViewDataSet(sWhereCondition, bIsProject, "", 0, "", "", sLoginUserName, ref iTotCount, bProjectViewRights);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public string GetWorkPlaceWhereCondition(bool bIsProjectList, string sUserLoginId)
+        {
+            string sMyWorkPlaceCondition = "";
+
+            sMyWorkPlaceCondition += " A.IsDone=0 And A.IsActive=1 And A.TaskId In";
+
+            sMyWorkPlaceCondition += " (Select ObjectId From ProcessedBy Where ";
+            if (bIsProjectList)
+                sMyWorkPlaceCondition += " ObjectType=" + ((int)Enums.VTSObjects.Project).ToString();
+            else
+                sMyWorkPlaceCondition += " ObjectType=" + ((int)Enums.VTSObjects.Task).ToString();
+
+            sMyWorkPlaceCondition += " And PerformedBy in ";
+            sMyWorkPlaceCondition += " (Select AddresseId From Addresses Where LoginName=" + Common.EncodeNString(sUserLoginId);
+            sMyWorkPlaceCondition += " Union Select AddresseId From Addresses Where PersonId in (Select AddresseId From Addresses Where LoginName=" + Common.EncodeString(sUserLoginId) + ")";
+            sMyWorkPlaceCondition += " Union Select OrganizationId From Addresses Where PersonId in (Select AddresseId From Addresses Where LoginName=" + Common.EncodeString(sUserLoginId) + "))) ";
+
+            return sMyWorkPlaceCondition;
+        }
+
+
 
         public string GetListViewDataSetForCount(int objType, int iRecord_Id, string strLoginName, bool bIsArchived)
         {
