@@ -160,14 +160,19 @@ namespace VirtusMobileAPI.Controllers
         [HttpPost]
         [ActionName("SaveOrSendUserRequests")]
         [Route("VirtusApi/UserRequest/SaveOrSendUserRequest/{userRequestId}")]
-        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]UserRequestActionData data)
+        //public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]UserRequestActionData data)
+        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]string UserRequestActionData)
         {
+
+
             bool bSuccess = default(bool);
             try
             {
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<UserRequestActionData>(UserRequestActionData);
+
                 repository.BeginTrans();
                 int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
-
+                
                 if (!bSuccess)
                 {
                     repository.RollbackTrans();

@@ -31,8 +31,7 @@ namespace VirtusBI
             { throw ex; }
 
         }
-
-
+        
         public DataSet GetContactPositionDetails(int positionId)
         {
             try

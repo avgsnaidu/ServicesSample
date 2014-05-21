@@ -269,7 +269,7 @@ namespace VirtusDataModel
 
     public class UserRequestActionData : UserRequest
     {
-        public bool IsSaveDraft = false;
+
         public string ToUserids { get; set; }
         public string OriginalSubject { get; set; }
         public bool DeadlineRemind { get; set; }
@@ -281,10 +281,10 @@ namespace VirtusDataModel
         public string RequestComponents { get; set; }
         public string Comments { get; set; }
         public int OriginalStatus { get; set; }
-        public bool IsArchived { get; set; }
-        public bool IsManualCode { get; set; }
+        //public bool IsArchived { get; set; }
+        //public bool IsManualCode { get; set; }
         public DateTime? RequestDate { get; set; }
-        public int OriginalRequest { get; set; }
+        //public int OriginalRequest { get; set; }
         public string DesignContractCode { get; set; }
         public bool IsDesign { get; set; }
         public bool CreateNextStep { get; set; }
@@ -293,6 +293,7 @@ namespace VirtusDataModel
         public bool IsKeptHold { get; set; }
         public int OldReminderMonths { get; set; }
         public bool IsHoldRemind { get; set; }
+        public bool IsSaveDraft = false;
 
     }
 

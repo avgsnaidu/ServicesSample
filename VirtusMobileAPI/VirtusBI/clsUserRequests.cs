@@ -665,8 +665,8 @@ namespace VirtusBI
                         strSql += uReqObj.DepartmentId + ",";
                     else
                         strSql += "Null,";
-                    if (uReqObj.OriginalRequest != 0)
-                        strSql += uReqObj.OriginalRequest + "," + uReqObj.OriginalReqProject + ",NULL)";
+                    if (uReqObj.OriginalRequestId != 0)
+                        strSql += uReqObj.OriginalRequestId + "," + uReqObj.OriginalReqProject + ",NULL)";
                     else
                         strSql += "NULL,NULL,NULL)";
                 }
@@ -712,8 +712,8 @@ namespace VirtusBI
                         strSql += "IsContractRequired=1,";
                     else
                         strSql += "IsContractRequired=0,";
-                    if (uReqObj.OriginalRequest != 0)
-                        strSql += "OriginalRequest=" + uReqObj.OriginalRequest + ",";
+                    if (uReqObj.OriginalRequestId != 0)
+                        strSql += "OriginalRequest=" + uReqObj.OriginalRequestId + ",";
                     if (uReqObj.OriginalReqProject != 0)
                         strSql += "OriginalReqProject=" + uReqObj.OriginalReqProject + ",";
                     if (uReqObj.DepartmentId != 0)
