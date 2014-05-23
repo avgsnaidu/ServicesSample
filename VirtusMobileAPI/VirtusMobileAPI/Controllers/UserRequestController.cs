@@ -162,16 +162,51 @@ namespace VirtusMobileAPI.Controllers
         [HttpPost]
         [AcceptVerbs("POST", "PUT")]
         [Route("VirtusApi/UserRequest/SendUserRequest/{userRequestId}")]
-        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]dynamic userRequestActionData)
+        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]dynamic newUserRequestActionData)
         {
 
 
             bool bSuccess = default(bool);
             try
             {
-                string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(userRequestActionData, Newtonsoft.Json.Formatting.None);
+                string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(newUserRequestActionData, Newtonsoft.Json.Formatting.None);
 
-                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<UserRequestActionData>(jsonString);
+                var newUserdata = Newtonsoft.Json.JsonConvert.DeserializeObject<NewUserRequestActionData>(jsonString);
+                EditUserRequestActionData data = new EditUserRequestActionData(newUserdata);
+                repository.BeginTrans();
+                int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
+
+                if (!bSuccess)
+                {
+                    repository.RollbackTrans();
+                }
+                else
+                {
+                    repository.CommitTrans();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, new { RecordId = iRecordId, IsSavedSucessfully = bSuccess }, Configuration.Formatters.JsonFormatter);
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [AcceptVerbs("POST", "PUT")]
+        [Route("VirtusApi/UserRequest/ProcessUserRequest/{userRequestId}")]
+        public HttpResponseMessage HoldOrProcessUserRequest(int userRequestId, [FromBody]dynamic editUserRequestActionData)
+        {
+
+
+            bool bSuccess = default(bool);
+            try
+            {
+                string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(editUserRequestActionData, Newtonsoft.Json.Formatting.None);
+
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<EditUserRequestActionData>(jsonString);
 
                 repository.BeginTrans();
                 int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
@@ -193,6 +228,7 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex.Message);
             }
         }
+
 
 
 

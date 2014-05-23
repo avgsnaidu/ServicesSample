@@ -75,11 +75,11 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnGetMilestonesOrProjectManagers(isProject, Convert.ToInt32(projectId), isDone);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-
-        [Route("GetProjectKind/{DepartmentId}/{IsPorject}")]
-        public HttpResponseMessage GetProjectKindList(int DepartmentId, bool IsProject)
+        [HttpGet]
+        [Route("GetProjectKinds/{departmentId}/{isProject}")]
+        public HttpResponseMessage GetProjectKindList(int departmentId, bool isProject)
         {
-            var result = repository.GetKindBindingDS(IsProject, DepartmentId);
+            var result = repository.GetKindBindingDS(isProject, departmentId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 

@@ -606,7 +606,7 @@ namespace VirtusBI
             }
         }
 
-        public int fnSave(int iRecordID, ref bool bSuccess, UserRequestActionData uReqObj)
+        public int fnSave(int iRecordID, ref bool bSuccess, EditUserRequestActionData uReqObj)
         {
             try
             {
@@ -836,7 +836,7 @@ namespace VirtusBI
             }
         }
 
-        public bool fnSaveDraft(int iRecordId, string strFromUser, UserRequestActionData uReqObj)
+        public bool fnSaveDraft(int iRecordId, string strFromUser, EditUserRequestActionData uReqObj)
         {
             try
             {
@@ -888,7 +888,7 @@ namespace VirtusBI
             }
         }
 
-        public bool fnSaveHoldData(int iRecordId, string strFromUser, UserRequestActionData uReqObj)
+        public bool fnSaveHoldData(int iRecordId, string strFromUser, EditUserRequestActionData uReqObj)
         {
             try
             {
@@ -992,7 +992,7 @@ namespace VirtusBI
             }
         }
 
-        private int fnInsertBasicDesignTender(int iRecordID, UserRequestActionData uReqObj)
+        private int fnInsertBasicDesignTender(int iRecordID, EditUserRequestActionData uReqObj)
         {
             try
             {

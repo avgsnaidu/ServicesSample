@@ -267,7 +267,7 @@ namespace VirtusDataModel
         //}
     }
 
-    public class UserRequestActionData : UserRequest
+    public class UserRequestActionData1 : UserRequest
     {
 
         public string ToUserids { get; set; }
@@ -296,6 +296,223 @@ namespace VirtusDataModel
         public bool IsSaveDraft = false;
 
     }
+
+    public class NewUserRequestActionData
+    {
+        public string Code
+        {
+            get;
+            set;
+        }
+        public int RequestType
+        {
+            get;
+            set;
+        }
+
+        public string Subject
+        {
+            get;
+            set;
+        }
+
+        public decimal InitialBudget
+        {
+            get;
+            set;
+        }
+        public string Description
+        {
+            get;
+            set;
+        }
+        public string CreatedBy
+        {
+            get;
+            set;
+        }
+
+        public System.DateTime? CreatedOn
+        {
+            get;
+            set;
+        }
+
+        public string ModifiedBy
+        {
+            get;
+            set;
+        }
+
+        public System.DateTime? ModifiedOn
+        {
+            get;
+            set;
+        }
+
+        public int Status
+        {
+            get;
+            set;
+        }
+
+        public bool IsActive
+        {
+            get;
+            set;
+        }
+        public int DepartmentId
+        {
+            get;
+            set;
+        }
+
+
+
+        public string ToUserids { get; set; }
+
+        public int ToUserId { get; set; }
+        public string ToCCUsers { get; set; }
+
+        public string Comments { get; set; }
+
+        public DateTime? RequestDate { get; set; }
+        public bool IsSaveDraft { get; set; }
+
+
+
+    }
+
+
+    public class EditUserRequestActionData : NewUserRequestActionData
+    {
+        public EditUserRequestActionData() { }
+        public EditUserRequestActionData(NewUserRequestActionData data)
+        {
+            base.Code = data.Code;
+            base.Comments = data.Comments;
+            base.CreatedBy = data.CreatedBy;
+            base.CreatedOn = data.CreatedOn;
+            base.DepartmentId = data.DepartmentId;
+            base.Description = data.Description;
+            base.InitialBudget = data.InitialBudget;
+            base.IsActive = data.IsActive;
+            //base.IsRead = data.IsRead;
+            base.ModifiedBy = data.ModifiedBy;
+            base.ModifiedOn = data.ModifiedOn;
+            base.IsSaveDraft = data.IsSaveDraft;
+            //base.OriginalRequestId = data.OriginalRequestId;
+            base.RequestDate = data.RequestDate;
+            base.RequestType = data.RequestType;
+            base.Status = data.Status;
+            base.Subject = data.Subject;
+            base.ToCCUsers = data.ToCCUsers;
+            base.ToUserId = data.ToUserId;
+            base.ToUserids = data.ToUserids;
+        }
+
+        public string RequestComponents { get; set; }
+
+        public string OriginalSubject { get; set; }
+        public bool DeadlineRemind { get; set; }
+        public int DeadlineReminderDays { get; set; }
+        public DateTime? DeadlineEndDate { get; set; }
+        public bool AlreadyApproved { get; set; }
+
+        public int OriginalStatus { get; set; }
+        public bool IsArchived { get; set; }
+        public bool IsManualCode { get; set; }
+
+        public int OriginalRequest { get; set; }
+        public string DesignContractCode { get; set; }
+        public bool IsDesign { get; set; }
+        public bool CreateNextStep { get; set; }
+        public DateTime? HoldUntilDate { get; set; }
+        public int HoldRemindDays { get; set; }
+        public bool IsKeptHold { get; set; }
+        public int OldReminderMonths { get; set; }
+        public bool IsHoldRemind { get; set; }
+        public bool IsDone
+        {
+            get;
+            set;
+        }
+        public System.DateTime? DoneDate
+        {
+            get;
+            set;
+        }
+        public bool IsDesignRequired
+        {
+            get;
+            set;
+        }
+
+        public bool IsTenderRequired
+        {
+            get;
+            set;
+        }
+
+        public bool IsContractRequired
+        {
+            get;
+            set;
+        }
+
+        public string ForwardedTo
+        {
+            get;
+            set;
+        }
+
+        public System.DateTime? ForwardedOn
+        {
+            get;
+            set;
+        }
+        public int Project
+        {
+            get;
+            set;
+        }
+        public int OriginalReqProject
+        {
+            get;
+            set;
+        }
+
+        public int UserRequestId_Old
+        {
+            get;
+            set;
+        }
+        public bool IsRead
+        {
+            get;
+            set;
+        }
+
+        public int PriorityId
+        {
+            get;
+            set;
+        }
+        public int OriginalRequestId
+        {
+            get;
+            set;
+        }
+
+
+
+    }
+
+
+
+
+
+
 
 
     public class UserRequestReceived : UserRequest

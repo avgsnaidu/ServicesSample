@@ -21,7 +21,7 @@ namespace VirtusBI
         }
 
         #region OracleTransations
-        
+
         #endregion
     }
 }
