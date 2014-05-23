@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json.Linq;
 using VirtusBI;
 using VirtusDataModel;
 using VirtusMobileService.Models;
@@ -158,21 +160,22 @@ namespace VirtusMobileAPI.Controllers
 
 
         [HttpPost]
-        [ActionName("SaveOrSendUserRequests")]
-        [Route("VirtusApi/UserRequest/SaveOrSendUserRequest/{userRequestId}")]
-        //public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]UserRequestActionData data)
-        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]string UserRequestActionData)
+        [AcceptVerbs("POST", "PUT")]
+        [Route("VirtusApi/UserRequest/SendUserRequest/{userRequestId}")]
+        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]dynamic userRequestActionData)
         {
 
 
             bool bSuccess = default(bool);
             try
             {
-                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<UserRequestActionData>(UserRequestActionData);
+                string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(userRequestActionData, Newtonsoft.Json.Formatting.None);
+
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<UserRequestActionData>(jsonString);
 
                 repository.BeginTrans();
                 int iRecordId = repository.fnSave(userRequestId, ref bSuccess, data);
-                
+
                 if (!bSuccess)
                 {
                     repository.RollbackTrans();
@@ -187,11 +190,15 @@ namespace VirtusMobileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex.Message);
             }
         }
 
 
 
     }
+
+
 }
+
+
