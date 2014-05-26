@@ -190,7 +190,8 @@ namespace VirtusMobileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex.Message);
+                repository.RollbackTrans();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex);
             }
         }
 
@@ -225,6 +226,7 @@ namespace VirtusMobileAPI.Controllers
             }
             catch (Exception ex)
             {
+                repository.RollbackTrans();
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not Saved" + ex.Message);
             }
         }
