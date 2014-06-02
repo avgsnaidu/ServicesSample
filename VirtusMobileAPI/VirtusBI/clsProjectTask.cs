@@ -424,6 +424,47 @@ namespace VirtusBI
             }
         }
 
+
+        public DataSet GetProjectMilestones(string sRecordID, int iObjType)
+        {
+
+            try
+            {
+                int iRecordId = 0;
+                if (sRecordID != "")
+                    iRecordId = int.Parse(sRecordID);
+                //else
+                //    sRecordID = 0;
+
+                SqlParameter[] sPrms = new SqlParameter[2];
+                SqlParameter sPrm = new SqlParameter();
+
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.Int;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@ObjectId";
+                sPrm.Value = iRecordId;
+                sPrms[0] = sPrm;
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.Int;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@ObjTypeID";
+                sPrm.Value = iObjType;
+                sPrms[1] = sPrm;
+
+                return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetProjectMilestonesDs", sPrms);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
         public DataSet GetTaskFunctions()
         {
             try

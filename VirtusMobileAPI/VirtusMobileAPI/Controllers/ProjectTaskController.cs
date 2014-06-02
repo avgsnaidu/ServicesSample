@@ -122,8 +122,8 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [Route("GetTaskFunctions/{recordId}/{objectType}")]
-        public HttpResponseMessage GetProjectTaskFunctions(string recordId, int objectType)
+        [Route("GetTaskFunctions")]
+        public HttpResponseMessage GetProjectTaskFunctions()
         {
             var result = repository.GetTaskFunctions();
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
@@ -136,6 +136,14 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+        [Route("GetProjectMilestones/{recordId}/{objectType}")]
+        public HttpResponseMessage GetProjectMilestones(string recordId, int objectType)
+        {
+            var result = repository.GetProjectMilestones(recordId, objectType);
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+        }
+
+
 
         [Route("GetIsContributionExceeds/{contribution}/{mileStoneId}/{recordId}")]
         public HttpResponseMessage GetIsContributionExceeds(string contribution, int mileStoneId, string recordId)
@@ -145,7 +153,7 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
-        [Route("GetIsInValidBudget/{currentBudget}/{PreviousBudget}/{recordId}/{ParentId}")]
+        [Route("GetIsInvalidBudget/{currentBudget}/{PreviousBudget}/{recordId}/{ParentId}")]
         public HttpResponseMessage GetIsInValidBudget(decimal currentBudget, decimal PreviousBudget, string recordId, int ParentId)
         {
             string message = default(string);
@@ -185,7 +193,7 @@ namespace VirtusMobileAPI.Controllers
             if (resultTable.Tables[0].Rows.Count > 0)
                 return Request.CreateResponse(HttpStatusCode.OK, resultTable, Configuration.Formatters.JsonFormatter);
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound, resultTable);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "no results found");
         }
 
 
@@ -196,7 +204,7 @@ namespace VirtusMobileAPI.Controllers
             if (!string.IsNullOrEmpty(result))
                 return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, result);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "no results found");
         }
 
         [Route("GetChildProjectTaskNotDoneCount/{recordId}")]
@@ -217,7 +225,7 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
-
+        [HttpGet]
         [Route("IsMilestoneDependentOn/{mileStoneId}/{isForDelete}")]
         public HttpResponseMessage IsMilestoneDependentOn(string mileStoneId, bool isForDelete)
         {
@@ -228,7 +236,7 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
-
+        [HttpGet]
         [Route("IsChildObjectExists/{recordId}")]
         public HttpResponseMessage IsChildObjectExists(string recordId)
         {
@@ -240,7 +248,7 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
-
+        [HttpGet]
         [Route("GetProjectTaskTenderOrContractId/{recordId}/{loginName}")]
         public HttpResponseMessage GetProjectTaskTenderOrContractId(int recordId, string loginName)
         {
@@ -344,14 +352,14 @@ namespace VirtusMobileAPI.Controllers
         //Processed By
 
 
-
+        [HttpGet]
         [Route("GetProjectTaskProcessedBy/{recordId}/{objectType}")]
         public HttpResponseMessage GetProjectTaskProcessedBy(string recordId, int objectType)
         {
             var result = processedRepository.GetTaskProcessedBy(recordId, objectType);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-
+        [HttpGet]
         [Route("GetProjectTaskProcessedByAddress/{recordId}/{objectType}")]
         public HttpResponseMessage GetProjectTaskProcessedByAddress(string recordId, int objectType)
         {
@@ -379,7 +387,7 @@ namespace VirtusMobileAPI.Controllers
 
 
         //Deadline Extensions
-
+        [HttpGet]
         [Route("GetDeadLineExtension/{recordId}")]
         public HttpResponseMessage GetProjectDeadLineExtension(string recordId)
         {
