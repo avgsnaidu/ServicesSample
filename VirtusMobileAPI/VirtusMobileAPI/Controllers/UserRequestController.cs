@@ -23,7 +23,13 @@ namespace VirtusMobileAPI.Controllers
         {
             var result = repository.fnGetUserRequestDetails(Id, userName);
             if (result != null)
+            {
+                //if (result.Tables[0].Rows.Count == 1)
+                //    return Request.CreateResponse(HttpStatusCode.OK, result.Tables[0], Configuration.Formatters.JsonFormatter);
+                //else
                 return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+
+            }
             else
                 return Request.CreateResponse(HttpStatusCode.NotFound, result, Configuration.Formatters.JsonFormatter);
 

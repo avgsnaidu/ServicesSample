@@ -46,7 +46,19 @@ namespace VirtusBI
                 sPrms[1] = sPrm;
 
                 ds = Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetUserRequestDetailsDS", sPrms);
+                string strToCcUsers = fnGetCCUsers(iUserRequestId, strLoginName);
 
+                if (!string.IsNullOrEmpty(strToCcUsers))
+                {
+                    DataColumn newCol = new DataColumn("ToCcUsers", typeof(string));
+                    newCol.AllowDBNull = true;
+                    ds.Tables[0].Columns.Add(newCol);
+
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        row["ToCcUsers"] = strToCcUsers;
+                    }
+                }
                 return ds;
 
 

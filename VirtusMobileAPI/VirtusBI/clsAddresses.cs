@@ -31,7 +31,7 @@ namespace VirtusBI
             { throw ex; }
 
         }
-        
+
         public DataSet GetContactPositionDetails(int positionId)
         {
             try
@@ -101,6 +101,77 @@ namespace VirtusBI
                 return Common.dbMgr.ExecuteNonQuery(CommandType.StoredProcedure, queryString, Params);
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public DataSet GetListViewDataSet(string sWhereCondition, string strSearchCondition, int iNoOfRecords, string strOrderBy, string strSortOrder, int iUILanguageId, string strLoginName, ref int iTotCount, bool bFromMyAddresses, bool bShowFromMyAddressesFromObjects, bool bShowInternalAsMyAddresses, bool bShowOnlyOpenObjects, bool bShowAllAddresses = true)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                SqlParameter[] Params = new SqlParameter[13];
+                int iIndex = 0;
+
+                Params[iIndex] = new SqlParameter("@WhereCondition", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = sWhereCondition;
+
+                Params[++iIndex] = new SqlParameter("@SearchCondition", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strSearchCondition;
+
+                Params[++iIndex] = new SqlParameter("@NoTopRecords", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iNoOfRecords;
+
+                Params[++iIndex] = new SqlParameter("@OrderBy", SqlDbType.VarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strOrderBy;
+
+                Params[++iIndex] = new SqlParameter("@SortOrder", SqlDbType.VarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strSortOrder;
+
+                Params[++iIndex] = new SqlParameter("@UILanguageId", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iUILanguageId;
+
+                Params[++iIndex] = new SqlParameter("@LoginName", SqlDbType.NVarChar);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = strLoginName;
+
+                Params[++iIndex] = new SqlParameter("@IsMyAddList", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bFromMyAddresses;
+
+                Params[++iIndex] = new SqlParameter("@IsMyAddFromMyObjects", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bShowFromMyAddressesFromObjects;
+
+                Params[++iIndex] = new SqlParameter("@ShowIntenalAsMyAddresses", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bShowInternalAsMyAddresses;
+
+                Params[++iIndex] = new SqlParameter("@ShowOnlyOpenObjects", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bShowOnlyOpenObjects;
+
+                Params[++iIndex] = new SqlParameter("@ShowAllAddresses", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bShowAllAddresses;
+
+                Params[++iIndex] = new SqlParameter("@TotCount", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Output;
+
+                ds = Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetAddressListViewRightsDS", Params);
+
+                iTotCount = int.Parse(Params[iIndex].Value.ToString());
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
