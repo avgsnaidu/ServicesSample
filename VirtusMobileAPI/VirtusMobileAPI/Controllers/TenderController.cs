@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EPMEnums;
 using VirtusBI;
 using VirtusDataModel;
 using VirtusMobileService.Models;
@@ -84,25 +85,6 @@ namespace VirtusMobileAPI.Controllers
         ///   (bool )IsSelected  ,
         ///   (int )RecordId   </param>
         /// <returns></returns>
-        [HttpPost]
-        [ActionName("SaveTenderConsultants")]
-        [Route("VirtusApi/Tender/SaveTenderConsultants/{designId}")]
-        public HttpResponseMessage SaveTenderConsultants(int designId, [FromBody]TenderConsultantActionData data)
-        {
-            var listData = new List<TenderConsultantActionData>() { data };
-
-            DataTable dt = ConverterHelper.ConvertToDataTable(listData);
-
-            if (dt != null)
-            {
-                var result = repository.fnSaveConsultants(dt, designId);
-                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
-            }
-            else
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Please enter valid data");
-            }
-        }
 
         [HttpPost]
         [ActionName("InsertBasicTenderContracts")]
@@ -134,26 +116,42 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
-
-
-
+        /// <summary>
+        /// Saving TenderDetails or Creating the Contract for the particular Tender by passing DesingId/TenderId with TenderUpdateActionData which has 
+        /// parameter as TenderActionData Type and list of TenderConsultantActionData Type data -- 
+        /// After saving Tender need to Create the Tender Contract by calling the Service "InsertTenderContracts"
+        /// </summary>
+        /// <param name="recordId"></param>
+        /// <param name="IsDesign"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("SaveTenderDetails")]
-        [Route("VirtusApi/Tender/SaveTender/{recordId}/{IsDesign}")]
-        public HttpResponseMessage SaveTenderDetails(int recordId, bool IsDesign, [FromBody]TenderActionData data)
+        [Route("VirtusApi/Tender/SaveTender/{recordId}/{IsTender}")]
+        public HttpResponseMessage SaveTenderDetails(int recordId, bool IsTender, [FromBody]TenderUpdateActionData data)
         {
             try
             {
+                var tenderData = data.TenderActionData;
+                var tenderConsultantData = data.TenderConsultantList;
+                DataTable dt = ConverterHelper.ConvertToDataTable(tenderConsultantData);
+
                 repository.BeginTrans();
                 bool success = default(bool);
-                int insertRecord = repository.fnSave(recordId, IsDesign, ref success, data);
-                string str = string.Format(" Record Id : {0} and Saving Sucess is : {1}", insertRecord, success);
+                int insertedRecord = repository.fnSave(recordId, IsTender, ref success, tenderData);
+                string str = string.Format(" Record Id : {0} and Saving Sucess is : {1}", insertedRecord, success);
                 if (!success)
                 {
                     repository.RollbackTrans();
                     return Request.CreateResponse(HttpStatusCode.BadRequest, str, Configuration.Formatters.JsonFormatter);
 
                 }
+                if (!SaveTenderConsultants(recordId, dt))
+                {
+                    repository.RollbackTrans();
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Got error while saving..");
+                }
+
                 repository.CommitTrans();
                 return Request.CreateResponse(HttpStatusCode.OK, str, Configuration.Formatters.JsonFormatter);
 
@@ -164,6 +162,47 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
+
+        private bool SaveTenderConsultants(int recordId, DataTable dt)
+        {
+            try
+            {
+                bool bSucess = false;
+
+                bSucess = repository.fnSaveConsultants(dt, recordId);
+                return bSucess;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        //[HttpPost]
+        //[ActionName("SaveTenderConsultants")]
+        //[Route("VirtusApi/Tender/SaveTenderConsultants/{designId}")]
+
+        private HttpResponseMessage SaveTenderConsultants(int designId, [FromBody]List<TenderConsultantActionData> data)
+        {
+            DataTable dt;
+            //var listData = new List<TenderConsultantActionData>() { data };
+
+            dt = ConverterHelper.ConvertToDataTable(data);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                var result = repository.fnSaveConsultants(dt, designId);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Please provide valid Tender Consultants data");
+            }
+        }
+
+
 
 
 
@@ -203,8 +242,6 @@ namespace VirtusMobileAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
-
-
 
 
 

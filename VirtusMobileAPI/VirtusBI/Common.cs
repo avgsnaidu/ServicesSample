@@ -803,7 +803,7 @@ namespace VirtusBI
 
     public static class CommonVariable
     {
-        public static int iLanguageId = 0;
+        public static int iLanguageId = 3;
         public static string strYes = "Yes";
         public static string strNo = "No";
     }

@@ -467,7 +467,7 @@ namespace VirtusBI
                 sPrm.SqlDbType = System.Data.SqlDbType.NVarChar;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@Code";
-                sPrm.Value = data.NewCode;
+                sPrm.Value = data.NewCodeToContract;
                 sPrms[++iIndex] = sPrm;
 
                 sPrm = new SqlParameter();
@@ -607,7 +607,7 @@ namespace VirtusBI
             try
             {
                 int iTotCount = 0;
-                return GetListViewDataSet(sWhereCondition, "", 0, "", "", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
+                return GetListViewDataSet(sWhereCondition, "",500, "19", "DESC", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
             }
             catch (Exception ex)
             {

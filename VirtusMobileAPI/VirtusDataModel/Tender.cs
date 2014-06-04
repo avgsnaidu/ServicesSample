@@ -62,8 +62,14 @@ namespace VirtusDataModel
         //public int DesignId { get; set; }
         public int AddresseId { get; set; }
         public string Component { get; set; }
-        public bool Flag { get; set; }
+        public string Flag { get; set; }
         public string Comments { get; set; }
+    }
+
+    public class TenderUpdateActionData
+    {
+        public TenderActionData TenderActionData { get; set; }
+        public List<TenderConsultantActionData> TenderConsultantList { get; set; }
     }
 
     public class TenderContractActionData
@@ -71,7 +77,7 @@ namespace VirtusDataModel
         public int UserReqeustId { get; set; }
         public int TenderRecordId { get; set; }
         public string Subject { get; set; }
-        public string NewCode { get; set; }
+        public string NewCodeToContract { get; set; }
         public string CreatedBy { get; set; }
         public bool IsTender { get; set; }
         public string NewDesignContractCode { get; set; }
