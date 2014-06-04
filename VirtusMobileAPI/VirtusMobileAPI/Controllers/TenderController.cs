@@ -22,6 +22,11 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnGetDesignDetails(tenderId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
+        /// <summary>
+        /// Get all the tender Consultants of the Tender by providing the Tender Id
+        /// </summary>
+        /// <param name="tenderId"></param>
+        /// <returns></returns>
 
         [ActionName("GetDesignTenderConsultants")]
         [Route("VirtusApi/Tender/GetTenderConsultants/{tenderId}")]
@@ -68,7 +73,17 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
-
+        /// <summary>
+        /// Saving the Tender Consultants of particular Tender 
+        /// </summary>
+        /// <param name="designId"></param>
+        /// <param name="data">Here need to pass the parameter of Type TenderConsultantActionData with properties Containg like   (int)AddresseId  ,
+        ///   (string)Comments  ,
+        ///    (string) Component  ,
+        ///   (bool )Flag  ,
+        ///   (bool )IsSelected  ,
+        ///   (int )RecordId   </param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("SaveTenderConsultants")]
         [Route("VirtusApi/Tender/SaveTenderConsultants/{designId}")]
