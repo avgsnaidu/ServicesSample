@@ -79,7 +79,10 @@ namespace VirtusDataModel
         public string Subject { get; set; }
         public string NewCodeToContract { get; set; }
         public string CreatedBy { get; set; }
-        public bool IsTender { get; set; }
+        /// <summary>
+        /// If you Need to Create Tender -True else False
+        /// </summary>
+        public bool IsNeedToCreateTender { get; set; }
         public string NewDesignContractCode { get; set; }
     }
 }

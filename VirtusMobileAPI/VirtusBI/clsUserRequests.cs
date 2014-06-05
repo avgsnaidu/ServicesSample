@@ -1157,6 +1157,34 @@ namespace VirtusBI
             }
         }
 
+        public int fnGetUserRequestToUser(int iRecordId)
+        {
+            try
+            {
+                SqlParameter[] sPrms = new SqlParameter[1];
+                SqlParameter sPrm = new SqlParameter();
+                int iIndex = 0;
+
+                sPrm.SqlDbType = System.Data.SqlDbType.Int;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@UserRequestId";
+                sPrm.Value = iRecordId;
+                sPrms[iIndex] = sPrm;
+
+
+                object Id = Common.dbMgr.ExecuteScalar(CommandType.StoredProcedure, "spGetUserRequestToUser", sPrms);
+                if (Id.ToString() == "")
+                    return 0;
+                return int.Parse(Id.ToString());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         // Get the old userRequests based on the Typeof the requests
         public DataSet fnGetRequestForUsers(string LoginName, int iRequestType)
         {

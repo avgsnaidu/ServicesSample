@@ -13,10 +13,21 @@ using VirtusMobileService.Models;
 
 namespace VirtusMobileAPI.Controllers
 {
+    /// <summary>
+    /// UserRequest Related Services
+    /// </summary>
     public class UserRequestController : ApiController
     {
         clsUserRequests repository = new clsUserRequests();
 
+
+        /// <summary>
+        /// Get the Details of the UserRequests (but if here the list didn't have ToPerson ,to whom the request is passed then
+        /// To Get the userrequest To-UserId, need to Call the Service "GetUserRequestToUser")
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         [ActionName("GetUserRequest")]
         [Route("VirtusApi/UserRequest/GetUserRequest/{id}/{userName}")]
         public HttpResponseMessage GetUserRequestDetails(int Id, string userName)
@@ -60,12 +71,58 @@ namespace VirtusMobileAPI.Controllers
         //    return Request.CreateResponse(HttpStatusCode.OK, ds, Configuration.Formatters.JsonFormatter);
         //}
 
+
+        /// <summary>
+        ///  To Get the list of  available persons for To-Users or Cc-Users list
+        /// </summary>
+        /// <param name="LoginName"></param>
+        /// <param name="UserRequestId">For new Request pass default value of int i.e " 0 " </param>
+        /// <param name="IsForward"> True if it to fill forward persons list</param>
+        /// <param name="IsForCcUsers"> True if it to fill Cc-Users persons list</param>
+        /// <param name="selectedToUserIfAny"> pass the selectedToUserId If Any otherwise pass '0' </param>
+        /// <returns></returns>
+        /// 
+
+        //[ActionName("GetToUser")]
+        //[Route("VirtusApi/UserRequest/GetToUsers/{LoginName}/{UserRequestId}/{SearchCondition}/{NoOfRecords}/{OrderBy}/{SortOrder}/{TotalCount}/{IsForward}")]
+        //public HttpResponseMessage GetToUsersForUserRequest(string LoginName, int UserRequestId, int NoOfRecords, int TotalCount, bool IsForward = false, string OrderBy = "", string SortOrder = "", string SearchCondition = "")
+        //{
         [ActionName("GetToUser")]
-        [Route("VirtusApi/UserRequest/GetToUsers/{LoginName}/{UserRequestId}/{SearchCondition}/{NoOfRecords}/{OrderBy}/{SortOrder}/{TotalCount}/{IsForward}")]
-        public HttpResponseMessage GetToUsersForUserRequest(string LoginName, int UserRequestId, int NoOfRecords, int TotalCount, bool IsForward = false, string OrderBy = "", string SortOrder = "", string SearchCondition = "")
+        [Route("VirtusApi/UserRequest/GetUsers/{LoginName}/{UserRequestId}/{selectedToUserIfAny}/{IsForward}/{IsForCcUsers}")]
+        public HttpResponseMessage GetToUsersForUserRequest(string LoginName, int UserRequestId, int selectedToUserIfAny, bool IsForward = false, bool IsForCcUsers = false)
         {
-            DataSet ds = repository.fnGetUsersForUserRequest(ConverterHelper.CheckSingleQuote(LoginName), UserRequestId, ConverterHelper.CheckSingleQuote(SearchCondition), NoOfRecords, ConverterHelper.CheckSingleQuote(OrderBy), ConverterHelper.CheckSingleQuote(SortOrder), TotalCount, IsForward);
+            int noOfRecords = default(int);
+            int totalCount = default(int);
+            string orderBy = "";
+            string sortOrder = "";
+            string SearchCondition = string.Empty;
+
+            if (IsForCcUsers)
+            {
+                SearchCondition = "A.AddresseId not in (" + selectedToUserIfAny + ") AND  A.IsActive=1 ";
+                sortOrder = "4";
+            }
+            else
+            {
+                SearchCondition = "A.LoginName is not null And A.AddressType='P' and A.IsActive=1 And dbo.fnGetSplFunctionSecurity(A.LoginUserTypeId,49) = 1 ";
+            }
+
+            DataSet ds = repository.fnGetUsersForUserRequest(ConverterHelper.CheckSingleQuote(LoginName), UserRequestId,
+                ConverterHelper.CheckSingleQuote(SearchCondition), noOfRecords, ConverterHelper.CheckSingleQuote(orderBy), ConverterHelper.CheckSingleQuote(sortOrder), totalCount, IsForward);
             return Request.CreateResponse(HttpStatusCode.OK, ds, Configuration.Formatters.JsonFormatter);
+        }
+
+
+        /// <summary>
+        ///  Get the ToUserId of userRequest based on UserRequestId
+        /// </summary>
+        /// <param name="userRequestId"></param>
+        /// <returns></returns>
+        [Route("VirtusApi/UserRequest/GetUserRequestToUser/{userRequestId}/")]
+        public HttpResponseMessage GetUserRequestToUser(int userRequestId)
+        {
+            int unReadCount = repository.fnGetUserRequestToUser(userRequestId);
+            return Request.CreateResponse(HttpStatusCode.OK, unReadCount, Configuration.Formatters.JsonFormatter);
         }
 
 

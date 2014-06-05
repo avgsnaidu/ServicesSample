@@ -24,6 +24,9 @@ namespace VirtusMobileAPI
             );
 
             //config.Formatters.Insert(0, new MultiFormDataMediaTypeFormatter());
+
+            //json.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+
             config.Services.Replace(typeof(ValueProviderFactory), new RouteDataValueProviderFactory());
 
 

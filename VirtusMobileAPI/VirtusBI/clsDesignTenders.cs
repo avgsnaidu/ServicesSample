@@ -124,7 +124,7 @@ namespace VirtusBI
                             strSQL += " values(" + iDesignId + ",";
                             strSQL += Common.EncodeString(dtTab.Rows[i]["AddresseId"].ToString()) + ",";
 
-                            if ((bool)dtTab.Rows[i]["IsSelected"])
+                            if (Convert.ToBoolean(dtTab.Rows[i]["IsSelected"]))
                                 strSQL += "1,";
                             else
                                 strSQL += "0,";
@@ -480,8 +480,8 @@ namespace VirtusBI
                 sPrm = new SqlParameter();
                 sPrm.SqlDbType = System.Data.SqlDbType.Bit;
                 sPrm.Direction = ParameterDirection.Input;
-                sPrm.ParameterName = "@IsTender";
-                sPrm.Value = data.IsTender;
+                sPrm.ParameterName = "@IsToCreateTender";
+                sPrm.Value = data.IsNeedToCreateTender;
                 sPrms[++iIndex] = sPrm;
 
                 sPrm = new SqlParameter();
@@ -503,6 +503,7 @@ namespace VirtusBI
             }
         }
 
+      
 
         public NextObjectRecordDetails fnGetObjectRecordId(int iRecordId, int iObjectEnumId)
         {

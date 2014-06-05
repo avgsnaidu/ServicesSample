@@ -74,17 +74,17 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+
         /// <summary>
-        /// Saving the Tender Consultants of particular Tender 
+        /// Creating the new Contract Details after the Approving the tender 
         /// </summary>
-        /// <param name="designId"></param>
-        /// <param name="data">Here need to pass the parameter of Type TenderConsultantActionData with properties Containg like   (int)AddresseId  ,
-        ///   (string)Comments  ,
-        ///    (string) Component  ,
-        ///   (bool )Flag  ,
-        ///   (bool )IsSelected  ,
-        ///   (int )RecordId   </param>
+        /// <param name="data"> Here need to pass the following the Details regarding the TenderContractActionData  
+        ///  (int )UserReqeustId ,(int)TenderRecordId ,(string) Subject ,(string) NewCodeToContract ,(string) CreatedBy ,
+        /// If you Need to Create Tender -> IsNeedToCreateTender =True else IsNeedToCreateTender =False  ,
+        ///(string )NewDesignContractCode=""
+        /// </param>
         /// <returns></returns>
+
 
         [HttpPost]
         [ActionName("InsertBasicTenderContracts")]
