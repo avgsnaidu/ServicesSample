@@ -38,6 +38,52 @@ namespace VirtusMobileAPI.Controllers
 
         }
 
+        /// <summary>
+        ///  Get all the Available Consultants or Vendors for tender process
+        /// </summary>
+        /// <param name="loginName"> Login username in string type</param>
+        /// <param name="deleteFlagedAddressList"> If alredy Consultants exists in the list, then specify the list of addressid which has the Flag value as 'D' with comman separated like : "addressId,addressId2"  otherwise simplay pass empty value</param>
+        /// <returns></returns>
+
+        [Route("VirtusApi/Tender/GetAvailableConsultants/{loginName}/{noOfRecordsToFetch}/{deleteFlagedAddressList}")]
+        public HttpResponseMessage GetAvailableConsultants(string loginName, int noOfRecordsToFetch, string deleteFlagedAddressList = "")
+        {
+            clsAddresses addressRepository = new clsAddresses();
+            string whereCondition = string.Empty;
+            int noOfRecords = noOfRecordsToFetch;
+
+            string orderBy = "37";
+            int totalRecordCount = default(int);
+            int defaultLanguage = 3;
+            try
+            {
+                if (!string.IsNullOrEmpty(ConverterHelper.CheckSingleQuote(deleteFlagedAddressList)))
+                {
+                    whereCondition = " A.AddresseId not in(" + deleteFlagedAddressList + ")  ";
+                }
+                else
+                    whereCondition = "1=1";
+
+                whereCondition += " And A.AddressType='O' and A.IsInternalOrganization=0 And A.FinbaseAddresseId is not null AND  A.IsActive=1  ";
+
+                DataSet result = addressRepository.GetListViewDataSet(whereCondition, "", noOfRecords, orderBy, "DESC", defaultLanguage, loginName, ref totalRecordCount, false, false, false, false);
+                return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Requested data not found --: " + ex.Message);
+            }
+
+        }
+
+
+        //ds = clsAdd.GetListViewDataSet(sWhereCondition, "", int.Parse(cboShowTop.SelectedValue.ToString()), cboOrderbyList.SelectedValue.ToString(), cboSortOrder.SelectedValue.ToString(), Common.iLanguageId, Common.sUserName, ref iTotRecordsCount, false, false, false, false);
+
+
+
+
         [ActionName("GetApprovingAuthority")]
         [Route("VirtusApi/Tender/GetApprovingAuthority")]
         public HttpResponseMessage GetApprovingAuthority()

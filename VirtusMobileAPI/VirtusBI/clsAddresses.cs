@@ -103,6 +103,12 @@ namespace VirtusBI
             catch (Exception ex) { throw ex; }
         }
 
+        public DataSet GetListViewDataSet(string sWhereCondition, int iUILanguageId, string strLoginName, bool bFromMyAddresses, bool bShowFromMyAddressesFromObjects, bool bShowInternalAsMyAddresses, bool bShowOnlyOpenObjects, bool bShowAllAddresses = true)
+        {
+            int iTotCount = 0;
+            return GetListViewDataSet(sWhereCondition, "", 0, "", "", iUILanguageId, strLoginName, ref iTotCount, bFromMyAddresses, bShowFromMyAddressesFromObjects, bShowInternalAsMyAddresses, bShowOnlyOpenObjects, bShowAllAddresses);
+        }
+
         public DataSet GetListViewDataSet(string sWhereCondition, string strSearchCondition, int iNoOfRecords, string strOrderBy, string strSortOrder, int iUILanguageId, string strLoginName, ref int iTotCount, bool bFromMyAddresses, bool bShowFromMyAddressesFromObjects, bool bShowInternalAsMyAddresses, bool bShowOnlyOpenObjects, bool bShowAllAddresses = true)
         {
             DataSet ds = new DataSet();
@@ -173,7 +179,6 @@ namespace VirtusBI
                 throw ex;
             }
         }
-
 
 
 
