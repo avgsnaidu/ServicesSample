@@ -221,13 +221,19 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, status, Configuration.Formatters.JsonFormatter);
         }
 
-
+        /// <summary>
+        /// For sending the New UserRequest, need to pass the NewRequestActionData Type in json String format
+        /// </summary>
+        /// <param name="userRequestId"></param>
+        /// <param name="newUserRequestActionData"> Need to pass the sample data like :  {  "Code": "sample string 1",   "RequestType": 2,   "Subject": "sample string 3",   "InitialBudget": 4.0,   "Description": "sample string 5",   "CreatedBy": "sample string 6",  "CreatedOn": "2014-06-09",   "ModifiedBy": "sample string 7",   "ModifiedOn": "2014-06-09",   "Status": 8,   "IsActive": true,   "DepartmentId": 10,   "ToUserids": "sample string 11",   "ToUserId": 12,   "ToCCUsers": "sample string 13",   "Comments": "sample string 14",   "RequestDate": "2014-06-09",  "IsSaveDraft": true} </param>
+        /// <returns></returns>
         [HttpPost]
         [AcceptVerbs("POST", "PUT")]
-        [Route("VirtusApi/UserRequest/SendUserRequest/{userRequestId}")]
-        public HttpResponseMessage SaveOrSendUserRequest(int userRequestId, [FromBody]dynamic newUserRequestActionData)
+        [Route("VirtusApi/UserRequest/SendUserRequest")]
+        public HttpResponseMessage SaveOrSendUserRequest([FromBody]dynamic newUserRequestActionData)
         {
 
+            int userRequestId=default(int);
 
             bool bSuccess = default(bool);
             try
@@ -258,6 +264,19 @@ namespace VirtusMobileAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// This service is used to Process the "User Request" for next steps, by providing the meaning full values.     
+        /// This service is used to implement following actions like :  "Approve", "Approve and Forward ", " Need More Info ", "Reject ", "Hold "   - 
+        /// For Approving the Request Need to Change the Staus with following like : Status = (int)Enums.ObjectStatus.Approved,   CreateNextStep = true  , DoneDate = current date , IsDone = true ,  ModifiedBy = "loginUserName " ,  IsSaveDraft = false ,IsKeptHold = false etc..
+        /// Here while approving CreateNextStep should be true for creating next Object like tender or contract.   
+        /// For Approving and Forward need to  CreateNextStep = false , Status = (int)Enums.ObjectStatus.Approve_Forward ,IsDone=false   
+        /// For Hold --  CreateNextStep = false , Status = (int)Enums.ObjectStatus.Hold ,IsDone=false , IsKeptHold = true ,AlreadyApproved = true
+        /// For Need More Info --  CreateNextStep = false , Status =  (int)Enums.ObjectStatus.NeedMoreinfo ,IsDone=false , IsKeptHold = false
+        /// </summary>
+        /// <param name="userRequestId"> UserRequestId for which status to be changed</param>
+        /// <param name="editUserRequestActionData">need to pass json-type string data sample like :          {  "RequestComponents": "sample string 1",  "OriginalSubject": "sample string 2",  "DeadlineRemind": true,  "DeadlineReminderDays": 4,  "DeadlineEndDate": "2014-06-09",  "AlreadyApproved": true,  "OriginalStatus": 6,  "IsArchived": true,  "IsManualCode": true,  "OriginalRequest": 9,  "DesignContractCode": "sample string 10",  "IsDesign": true,  "CreateNextStep": true,  "HoldUntilDate": "2014-06-09",  "HoldRemindDays": 13,  "IsKeptHold": true,  "OldReminderMonths": 15,  "IsHoldRemind": true,  "IsDone": true,  "DoneDate": "2014-06-09T12:41:55.8755868+05:30",  "IsDesignRequired": true,  "IsTenderRequired": true,  "IsContractRequired": true,  "ForwardedTo": "sample string 21",  "ForwardedOn": "2014-06-09",  "Project": 22,  "OriginalReqProject": 23,  "UserRequestId_Old": 24,  "IsRead": true,  "PriorityId": 26,  "OriginalRequestId": 27,  "Code": "sample string 28",  "RequestType": 29,  "Subject": "sample string 30",  "InitialBudget": 31.0,  "Description": "sample string 32",  "CreatedBy": "sample string 33",  "CreatedOn": "2014-06-09",  "ModifiedBy": "sample string 34",  "ModifiedOn": "2014-06-09",  "Status": 35,  "IsActive": true,  "DepartmentId": 37,  "ToUserids": "sample string 38",  "ToUserId": 39,  "ToCCUsers": "sample string 40",  "Comments": "sample string 41",  "RequestDate": "2014-06-09",  "IsSaveDraft": true} </param>
+        /// <returns> If action is sucess then is will give Status Code as : 200 other wise, it may give status code : 400 which is an error.</returns>
         [HttpPost]
         [AcceptVerbs("POST", "PUT")]
         [Route("VirtusApi/UserRequest/ProcessUserRequest/{userRequestId}")]

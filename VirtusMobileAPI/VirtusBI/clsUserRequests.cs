@@ -642,7 +642,7 @@ namespace VirtusBI
                     if (uReqObj.DeadlineEndDate == null || uReqObj.DeadlineEndDate <= DateTime.MinValue)
                         strSql += "null,";
                     else
-                        strSql += "cast(" + uReqObj.DeadlineEndDate.ToString() + " as datetime),";
+                        strSql += "cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)uReqObj.DeadlineEndDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                     if (uReqObj.IsDone)
                         strSql += "1,";
@@ -652,7 +652,7 @@ namespace VirtusBI
                     if (uReqObj.DoneDate == null || uReqObj.DoneDate <= DateTime.MinValue)
                         strSql += "Null,";
                     else
-                        strSql += "cast(" + uReqObj.DoneDate.ToString() + " as datetime),";
+                        strSql += "cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)uReqObj.DoneDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                     if (uReqObj.IsDesignRequired)
                         strSql += "1,";
@@ -698,7 +698,7 @@ namespace VirtusBI
                     if (uReqObj.DeadlineEndDate == null || uReqObj.DeadlineEndDate <= DateTime.MinValue)
                         strSql += "DeadlineEndDate=null,";
                     else
-                        strSql += "DeadlineEndDate=cast(" + uReqObj.DeadlineEndDate.ToString() + " as datetime),";
+                        strSql += "DeadlineEndDate=cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)uReqObj.DeadlineEndDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                     if (uReqObj.IsDone)
                         strSql += "IsDone=1,";
@@ -708,7 +708,7 @@ namespace VirtusBI
                     if (uReqObj.DoneDate == null || uReqObj.DoneDate <= DateTime.MinValue)
                         strSql += "DoneDate=Null,";
                     else
-                        strSql += "DoneDate=cast(" + uReqObj.DoneDate.ToString() + " as datetime),";
+                        strSql += "DoneDate=cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)uReqObj.DoneDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                     if (uReqObj.IsDesignRequired)
                         strSql += "IsDesignRequired=1,";

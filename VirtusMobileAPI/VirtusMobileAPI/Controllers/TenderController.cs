@@ -23,6 +23,8 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnGetDesignDetails(tenderId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
+
+
         /// <summary>
         /// Get all the tender Consultants of the Tender by providing the Tender Id
         /// </summary>
@@ -42,7 +44,8 @@ namespace VirtusMobileAPI.Controllers
         ///  Get all the Available Consultants or Vendors for tender process
         /// </summary>
         /// <param name="loginName"> Login username in string type</param>
-        /// <param name="deleteFlagedAddressList"> If alredy Consultants exists in the list, then specify the list of addressid which has the Flag value as 'D' with comman separated like : "addressId,addressId2"  otherwise simplay pass empty value</param>
+        /// <param name="deleteFlagedAddressList"> If alredy Consultants exists in the list,  then specify the list of addressid which has the Flag value as 'D' with comman separated like : "addressId,addressId2"  otherwise simplay pass empty value</param>
+        /// <param name="noOfRecordsToFetch"> </param>
         /// <returns></returns>
 
         [Route("VirtusApi/Tender/GetAvailableConsultants/{loginName}/{noOfRecordsToFetch}/{deleteFlagedAddressList}")]
@@ -77,10 +80,6 @@ namespace VirtusMobileAPI.Controllers
             }
 
         }
-
-
-        //ds = clsAdd.GetListViewDataSet(sWhereCondition, "", int.Parse(cboShowTop.SelectedValue.ToString()), cboOrderbyList.SelectedValue.ToString(), cboSortOrder.SelectedValue.ToString(), Common.iLanguageId, Common.sUserName, ref iTotRecordsCount, false, false, false, false);
-
 
 
 
@@ -149,7 +148,6 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnInsertPMObjectRight(RecordId, objectEnumId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-
 
 
         [HttpPost]
