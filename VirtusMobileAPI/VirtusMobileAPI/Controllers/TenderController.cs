@@ -182,7 +182,7 @@ namespace VirtusMobileAPI.Controllers
 
                 repository.BeginTrans();
                 bool success = default(bool);
-                int insertedRecord = repository.fnSave(recordId, IsTender, ref success, tenderData);
+                int insertedRecord = repository.fnSave(recordId, !IsTender, ref success, tenderData);
                 string str = string.Format(" Record Id : {0} and Saving Sucess is : {1}", insertedRecord, success);
                 if (!success)
                 {

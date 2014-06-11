@@ -110,8 +110,8 @@ namespace VirtusDataModel
     public class ContractSaveActionData
     {
         public ContractActionData ContractActionData { get; set; }
-        public MileStoneActionData MileStoneActionData { get; set; }
-        public ContractVendorsData ContractVendorsData { get; set; }
+        public List<MileStoneActionData> MileStoneActionData { get; set; }
+        public List<ContractVendorsData> ContractVendorsData { get; set; }
 
     }
 

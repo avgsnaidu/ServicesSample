@@ -112,6 +112,15 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
+        /// <summary>
+        /// For Saving the Contract Details and Creating the Project Call this service.
+        /// </summary>
+        /// <param name="RecordId"></param>
+        /// <param name="createProject"> If you need to create the Project the - True otherwise false</param>
+        /// <param name="userInitials"></param>
+        /// <param name="parentId"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 
         [HttpPost]
         [ActionName("SaveContractDetails")]
@@ -127,8 +136,8 @@ namespace VirtusMobileAPI.Controllers
                 else if (data.ContractVendorsData == null)
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Contract vendors data should not be null");
 
-                DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(new List<MileStoneActionData>() { data.MileStoneActionData });
-                DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(new List<ContractVendorsData> { data.ContractVendorsData });
+                DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(data.MileStoneActionData );
+                DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(data.ContractVendorsData );
 
                 repository.BeginTrans();
 
