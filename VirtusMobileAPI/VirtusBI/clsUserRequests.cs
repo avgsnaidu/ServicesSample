@@ -1036,14 +1036,14 @@ namespace VirtusBI
                 sPrm.SqlDbType = System.Data.SqlDbType.NVarChar;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@Code";
-                sPrm.Value = uReqObj.DesignContractCode;
+                sPrm.Value = string.IsNullOrEmpty(uReqObj.DesignContractCode) ? "" : uReqObj.DesignContractCode;
                 sPrms[++iIndex] = sPrm;
 
                 sPrm = new SqlParameter();
                 sPrm.SqlDbType = System.Data.SqlDbType.NVarChar;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@Comments";
-                sPrm.Value = uReqObj.Comments;
+                sPrm.Value = string.IsNullOrEmpty(uReqObj.Comments) ? "" : uReqObj.Comments;
                 sPrms[++iIndex] = sPrm;
                 return Common.dbMgr.ExecuteNonQuery(CommandType.StoredProcedure, "spInsertBasicDesignTenders", sPrms);
 
