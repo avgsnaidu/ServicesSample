@@ -180,7 +180,24 @@ namespace VirtusBI
             }
         }
 
+        public DataSet fnGetAddresseBasicDetails(int iAddresseId)
+        {
+            try
+            {
+                SqlParameter[] Params = new SqlParameter[1];
+                int iIndex = 0;
 
+                Params[iIndex] = new SqlParameter("@AddresseID", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iAddresseId;
+
+                return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetAddresseBasicDetailsDS", Params);
+
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+        }
 
     }
 }

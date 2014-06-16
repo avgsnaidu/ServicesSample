@@ -608,7 +608,7 @@ namespace VirtusBI
             try
             {
                 int iTotCount = 0;
-                return GetListViewDataSet(sWhereCondition, "",500, "19", "DESC", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
+                return GetListViewDataSet(sWhereCondition, "",1000, "19", "DESC", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
             }
             catch (Exception ex)
             {

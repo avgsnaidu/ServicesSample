@@ -17,7 +17,7 @@ namespace VirtusBI
             try
             {
                 int iTotCount = 0;
-                return GetListViewDataSet(sWhereCondition, "", 0, "", "", sLoginUserName, ref iTotCount, bUnDone, bIsProcessed);
+                return GetListViewDataSet(sWhereCondition, "", 0, "18", "DESC", sLoginUserName, ref iTotCount, bUnDone, bIsProcessed);
             }
             catch (Exception ex)
             {
@@ -333,10 +333,10 @@ namespace VirtusBI
                     strSql += "DeadlineRemind=0,DeadlineRemindDays=null,";
                     data.DeadlineRemindDays = -1;
                 }
-                if (data.DeadLineEndDate == 0)
+                if (data.DeadLineEndDate == null || data.DeadLineEndDate == DateTime.MinValue)
                     strSql += "DeadlineEndDate=null,";
                 else
-                    strSql += "DeadlineEndDate=cast(" + data.DeadLineEndDate.ToString() + " as datetime),";
+                    strSql += "DeadlineEndDate=cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)data.DeadLineEndDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                 if (data.IsDone)
                     strSql += "IsDone=1,";
@@ -353,10 +353,10 @@ namespace VirtusBI
                 else
                     strSql += " IsOwnerFullRights=0,";
 
-                if (data.DoneDate == 0)
+                if (data.DoneDate == null || data.DoneDate == DateTime.MinValue)
                     strSql += "DoneDate=Null,";
                 else
-                    strSql += "DoneDate=cast(" + data.DoneDate.ToString() + " as datetime),";
+                    strSql += "DoneDate=cast(" + DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, (DateTime)data.DoneDate, Microsoft.VisualBasic.FirstDayOfWeek.System, FirstWeekOfYear.System) + " as datetime),";
 
                 strSql += "ModifiedBy=" + Common.EncodeNString(data.ModifiedBy) + ",ModifiedOn=" + "getdate(),";
                 strSql += "Status=" + data.Status.ToString();
@@ -815,11 +815,12 @@ namespace VirtusBI
                 {
                     for (i = 0; i < dtMilestones.Rows.Count; i++)
                     {
-                        if (dtMilestones.Rows[i]["Remind"] == DBNull.Value)
-                            strRemind = "0";
-                        else if ((bool)dtMilestones.Rows[i]["Remind"] == true)
-                            strRemind = "1";
-                        else
+                       ////// not using reminder now
+                        ////if (dtMilestones.Rows[i]["Remind"] == DBNull.Value)
+                        ////    strRemind = "0";
+                        ////else if ((bool)dtMilestones.Rows[i]["Remind"] == true)
+                        ////    strRemind = "1";
+                        ////else
                             strRemind = "0";
 
 
@@ -869,10 +870,10 @@ namespace VirtusBI
 
                             strSQL += strRemind + ",";
 
-                            if (dtMilestones.Rows[i]["RemindBefore"] != DBNull.Value && dtMilestones.Rows[i]["RemindBefore"].ToString() != "")
-                                strSQL += dtMilestones.Rows[i]["RemindBefore"].ToString() + ",";
-                            else
-                                strSQL += "Null,";
+                            //if (dtMilestones.Rows[i]["RemindBefore"] != DBNull.Value && dtMilestones.Rows[i]["RemindBefore"].ToString() != "")
+                            //    strSQL += dtMilestones.Rows[i]["RemindBefore"].ToString() + ",";
+                            //else
+                            strSQL += "Null,";
 
                             if (dtMilestones.Rows[i]["Project"].ToString() != "")
                                 strSQL += Convert.ToInt32(dtMilestones.Rows[i]["Project"]) + " )";
@@ -882,7 +883,7 @@ namespace VirtusBI
                             Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
 
                             strMilestoneId = Common.dbMgr.ExecuteScalar(CommandType.Text, "Select max(MilestoneId) from Milestones");
-                            dtMilestones.Rows[i]["Id"] = strMilestoneId;
+                            dtMilestones.Rows[i]["MilestoneID"] = strMilestoneId;
 
                         }
                         else if (dtMilestones.Rows[i]["Flag"].ToString() == "M")
@@ -929,19 +930,20 @@ namespace VirtusBI
 
                             strSQL += "DeadlineRemind=" + strRemind + ",";
 
-                            if (dtMilestones.Rows[i]["RemindBefore"] != DBNull.Value && dtMilestones.Rows[i]["RemindBefore"].ToString() != "")
-                                strSQL += " DeadlineRemindDays=" + dtMilestones.Rows[i]["RemindBefore"].ToString();
-                            else
-                                strSQL += " DeadlineRemindDays=Null ";
-                            strSQL += " Where MilestoneId=" + dtMilestones.Rows[i]["ID"].ToString();
+                            ////if (dtMilestones.Rows[i]["RemindBefore"] != DBNull.Value && dtMilestones.Rows[i]["RemindBefore"].ToString() != "")
+                            ////    strSQL += " DeadlineRemindDays=" + dtMilestones.Rows[i]["RemindBefore"].ToString();
+                            ////else
+                            strSQL += " DeadlineRemindDays=Null ";
+
+                            strSQL += " Where MilestoneId=" + dtMilestones.Rows[i]["MilestoneID"].ToString();
                             Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
                         }
                         else if (dtMilestones.Rows[i]["Flag"].ToString() == "D")
                         {
-                            if (dtMilestones.Rows[i]["ID"].ToString() != "")
+                            if (dtMilestones.Rows[i]["MilestoneID"].ToString() != "")
                             {
                                 strSQL = "Delete from Milestones where ";
-                                strSQL += "MilestoneId=" + dtMilestones.Rows[i]["ID"].ToString();
+                                strSQL += "MilestoneId=" + dtMilestones.Rows[i]["MilestoneID"].ToString();
 
                                 Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
                             }
@@ -1139,11 +1141,11 @@ namespace VirtusBI
                                 strSQL += dtContractVendors.Rows[i]["CurrencyId"].ToString() + ",";
                             else
                                 strSQL += "Null,";
-
-                            if (dtContractVendors.Rows[i]["ExchangeRate"] != DBNull.Value)
-                                strSQL += Common.EncodeValue((decimal)dtContractVendors.Rows[i]["ExchangeRate"]) + ",";
-                            else
-                                strSQL += "Null,";
+                            // Commented for now no useful
+                            ////if (dtContractVendors.Rows[i]["ExchangeRate"] != DBNull.Value)
+                            ////    strSQL += Common.EncodeValue((decimal)dtContractVendors.Rows[i]["ExchangeRate"]) + ",";
+                            ////else
+                            strSQL += "Null,";
 
                             strSQL += strPenalty + ",";
 
@@ -1210,10 +1212,11 @@ namespace VirtusBI
                             else
                                 strSQL += "CurrencyId=Null,";
 
-                            if (dtContractVendors.Rows[i]["ExchangeRate"] != DBNull.Value)
-                                strSQL += " ExchangeRate=" + Common.EncodeValue((decimal)dtContractVendors.Rows[i]["ExchangeRate"]) + ",";
-                            else
-                                strSQL += " ExchangeRate=Null,";
+                           //// // commented for now
+                            ////if (dtContractVendors.Rows[i]["ExchangeRate"] != DBNull.Value)
+                            ////    strSQL += " ExchangeRate=" + Common.EncodeValue((decimal)dtContractVendors.Rows[i]["ExchangeRate"]) + ",";
+                            ////else
+                            strSQL += " ExchangeRate=Null,";
 
                             strSQL += "IsPenalty=" + strPenalty + ",";
 
@@ -1257,15 +1260,15 @@ namespace VirtusBI
 
                             strSQL += "SuretyBankName=" + Common.EncodeNString(dtContractVendors.Rows[i]["SuretyBankName"].ToString());
 
-                            strSQL += " Where RecordId=" + dtContractVendors.Rows[i]["ID"].ToString();
+                            strSQL += " Where RecordId=" + dtContractVendors.Rows[i]["ContractVendorId"].ToString();
                             Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
                         }
                         else if (dtContractVendors.Rows[i]["Flag"].ToString() == "D")
                         {
-                            if (dtContractVendors.Rows[i]["ID"].ToString() != "")
+                            if (dtContractVendors.Rows[i]["ContractVendorId"].ToString() != "")
                             {
                                 strSQL = "Delete from ContractVendors where ";
-                                strSQL += "RecordId=" + dtContractVendors.Rows[i]["ID"].ToString();
+                                strSQL += "RecordId=" + dtContractVendors.Rows[i]["ContractVendorId"].ToString();
 
                                 Common.dbMgr.ExecuteNonQuery(CommandType.Text, strSQL);
                             }

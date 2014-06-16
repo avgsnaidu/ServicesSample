@@ -101,14 +101,35 @@ namespace VirtusMobileAPI.Controllers
         }
 
 
-
-        [ActionName("GetDesignTendersList")]
-        [Route("VirtusApi/Tender/GetRecordsList/{LoginUserName}/{IsDesign}/{IsUnDone}/{WhereCondition}")]
-        public HttpResponseMessage GetDesignTendersList(string WhereCondition, string LoginUserName, bool IsDesign, bool IsUnDone)
+        /// <summary>
+        /// Returns the all the list of Desings or Tenders specific to login User
+        /// </summary>
+        /// <param name="LoginUserName"></param>
+        /// <param name="IsDesign"> Is design - " true " else if it is Tender - "false "</param>
+        /// <param name="IsUnDone">what records you want wheather done or undone records.</param>
+        /// <returns></returns>
+        [Route("VirtusApi/Tender/GetMyDesignOrTendersList/{LoginUserName}/{IsDesign}/{IsUnDone}")]
+        public HttpResponseMessage GetMyDesignTendersList(string LoginUserName, bool IsDesign, bool IsUnDone)
         {
-            var result = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(WhereCondition), LoginUserName, IsDesign, IsUnDone);
+            string whereCondition = repository.GetWorkPlaceWhereCondition(LoginUserName);
+            var result = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(whereCondition), LoginUserName, IsDesign, IsUnDone);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
+
+        /// <summary>
+        /// Returns all List of Designs or Tenders i.e other user related records also returns.
+        /// </summary>
+        /// <param name="LoginUserName">login username</param>
+        /// <param name="IsDesign">if it is tender - "False"</param>
+        /// <param name="IsUnDone"></param>
+        /// <returns></returns>
+        [Route("VirtusApi/Tender/GetDesignOrTendersList/{LoginUserName}/{IsDesign}/{IsUnDone}")]
+        public HttpResponseMessage GetDesignTendersList(string LoginUserName, bool IsDesign, bool IsUnDone)
+        {
+            var result = repository.GetListViewDataSet("", LoginUserName, IsDesign, IsUnDone);
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+        }
+
 
 
         [ActionName("GetDesignTendersListWithSearch")]

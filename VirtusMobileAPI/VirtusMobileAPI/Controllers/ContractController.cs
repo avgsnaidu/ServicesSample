@@ -14,14 +14,39 @@ namespace VirtusMobileAPI.Controllers
     public class ContractController : ApiController
     {
         clsContracts repository = new clsContracts();
-        [ActionName("GetContractsList")]
-        [Route("VirtusApi/Contract/GetContractsList/{LoginUserName}/{IsProcessed}/{IsUnDone}/{WhereCondition}")]
-        public HttpResponseMessage GetContractsList(string WhereCondition, string LoginUserName, bool IsProcessed, bool IsUnDone)
+
+        /// <summary>
+        /// Returns records related/specific to loginUser with done or processed filter.
+        /// </summary>
+        /// <param name="LoginUserName">login user name</param>
+        /// <param name="IsProcessed">Is contract is processed or not (it depends on project status)</param>
+        /// <param name="IsUnDone">Is contract is done or not.</param>
+        /// <returns></returns>
+        [Route("VirtusApi/Contract/GetMyContractsList/{LoginUserName}/{IsProcessed}/{IsUnDone}")]
+        public HttpResponseMessage GetMyContractsList(string LoginUserName, bool IsProcessed, bool IsUnDone)
         {
-            var result = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(WhereCondition), LoginUserName, IsUnDone, IsProcessed);
+            string whereCondition = repository.GetWorkPlaceWhereCondition(LoginUserName);
+            var result = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(whereCondition), LoginUserName, IsUnDone, IsProcessed);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+
+        /// <summary>
+        /// It gets the all the details of contracts which is accessible to login User with done or processed filter.
+        /// </summary>
+        /// <param name="LoginUserName"> login user name</param>
+        /// <param name="IsProcessed">Is contract is processed or not (it depends on project status)</param>
+        /// <param name="IsUnDone">Is contract is done or not.</param>
+        /// <returns></returns>
+        [ActionName("GetContractsList")]
+        [Route("VirtusApi/Contract/GetContractsList/{LoginUserName}/{IsProcessed}/{IsUnDone}")]
+        public HttpResponseMessage GetContractsList(string LoginUserName, bool IsProcessed, bool IsUnDone)
+        {
+            var result = repository.GetListViewDataSet("", LoginUserName, IsUnDone, IsProcessed);
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+        }
+
+       
 
         [ActionName("GetContractsListWithSearch")]
         [Route("VirtusApi/Contract/GetContractsList/{LoginUserName}/{TotalCount}/{IsProcessed}/{IsUnDone}/{NoOfRecords}/{OrderBy}/{SortOrder}/{SearchCondition}/{WhereCondition}")]
@@ -30,7 +55,11 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.GetListViewDataSet(ConverterHelper.CheckSingleQuote(WhereCondition), ConverterHelper.CheckSingleQuote(SearchCondition), NoOfRecords, ConverterHelper.CheckSingleQuote(OrderBy), ConverterHelper.CheckSingleQuote(SortOrder), LoginUserName, ref TotalCount, IsUnDone, IsProcessed);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-
+        /// <summary>
+        /// Returns Contract Details
+        /// </summary>
+        /// <param name="contractId"> Contractid of record.</param>
+        /// <returns></returns>
         [ActionName("GetContractDetails")]
         [Route("VirtusApi/Contract/GetContract/{contractId}")]
         public HttpResponseMessage GetContractDetails(int contractId)
@@ -39,6 +68,12 @@ namespace VirtusMobileAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
+        /// <summary>
+        /// Returns the Contract Milestones details if it has any already save milestones.
+        /// </summary>
+        /// <param name="contractId">contract id </param>
+        /// <param name="objectType">Object Type for contractId like - 27 </param>
+        /// <returns></returns>
         [ActionName("GetContractMilestoneDetails")]
         [Route("VirtusApi/Contract/GetContractMileStone/{contractId}/{objectType}")]
         public HttpResponseMessage GetContractMilestoneDetails(string contractId, int objectType)
@@ -58,12 +93,16 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-
+        /// <summary>
+        /// Returns the list Contractors details associated with the Tender and Contract.
+        /// </summary>
+        /// <param name="designId"></param>
+        /// <returns></returns>
         [ActionName("GetContractorsList")]
-        [Route("VirtusApi/Contract/GetContractorsList/{designId}")]
-        public HttpResponseMessage GetContractorsList(string designId)
+        [Route("VirtusApi/Contract/GetContractorsList/{tenderId}")]
+        public HttpResponseMessage GetContractorsList(string tenderId)
         {
-            var result = repository.fnGetContractorsList(designId);
+            var result = repository.fnGetContractorsList(tenderId);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
 
@@ -86,8 +125,8 @@ namespace VirtusMobileAPI.Controllers
 
 
 
-        [ActionName("GetWorkPlaceWhereCondition")]
-        [Route("VirtusApi/Contract/GetWorkPlaceWhereCondition/{userLoginId}")]
+        //[ActionName("GetWorkPlaceWhereCondition")]
+        //[Route("VirtusApi/Contract/GetWorkPlaceWhereCondition/{userLoginId}")]
         public HttpResponseMessage GetWorkPlaceWhereCondition(string userLoginId)
         {
             var result = repository.GetWorkPlaceWhereCondition(userLoginId);
@@ -119,7 +158,7 @@ namespace VirtusMobileAPI.Controllers
         /// <param name="createProject"> If you need to create the Project the - True otherwise false</param>
         /// <param name="userInitials"></param>
         /// <param name="parentId"></param>
-        /// <param name="data"></param>
+        /// <param name="data"> Penality Type values is like : PerDay = 1,PerWeek = 2,PerMonth = 3,Percentage = 4,Amount = 5</param>
         /// <returns></returns>
 
         [HttpPost]
@@ -136,8 +175,8 @@ namespace VirtusMobileAPI.Controllers
                 else if (data.ContractVendorsData == null)
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Contract vendors data should not be null");
 
-                DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(data.MileStoneActionData );
-                DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(data.ContractVendorsData );
+                DataTable dtMileStone = ConverterHelper.ConvertToDataTable<MileStoneActionData>(data.MileStoneActionData);
+                DataTable dtContractVendors = ConverterHelper.ConvertToDataTable<ContractVendorsData>(data.ContractVendorsData);
 
                 repository.BeginTrans();
 
