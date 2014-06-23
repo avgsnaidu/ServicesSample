@@ -8,7 +8,7 @@ using System.Web.Http;
 using EPMEnums;
 using VirtusBI;
 using VirtusDataModel;
-using VirtusMobileService.Models;
+using VirtusMobileAPI.Models;
 
 namespace VirtusMobileAPI.Controllers
 {

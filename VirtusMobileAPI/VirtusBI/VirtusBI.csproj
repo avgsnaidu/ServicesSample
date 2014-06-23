@@ -58,6 +58,7 @@
     <Compile Include="clsCodeGenaration.cs" />
     <Compile Include="clsContracts.cs" />
     <Compile Include="clsDesignTenders.cs" />
+    <Compile Include="clsDocuments.cs" />
     <Compile Include="clsLogin.cs" />
     <Compile Include="clsProjectTask.cs" />
     <Compile Include="clsUserRequests.cs" />

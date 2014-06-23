@@ -1313,8 +1313,6 @@ namespace VirtusBI
             }
         }
 
-
-
         public DataSet fnGetCurrencyDetails()
         {
             DataSet ds = new DataSet();
@@ -1406,14 +1404,6 @@ namespace VirtusBI
                 throw ex;
             }
         }
-
-
-
-
-
-
-
-
 
     }
 }

@@ -9,7 +9,7 @@ using System.Web.Http;
 using Newtonsoft.Json.Linq;
 using VirtusBI;
 using VirtusDataModel;
-using VirtusMobileService.Models;
+using VirtusMobileAPI.Models;
 
 namespace VirtusMobileAPI.Controllers
 {
@@ -89,13 +89,17 @@ namespace VirtusMobileAPI.Controllers
         //{
         [ActionName("GetToUser")]
         [Route("VirtusApi/UserRequest/GetUsers/{LoginName}/{UserRequestId}/{selectedToUserIfAny}/{IsForward}/{IsForCcUsers}")]
-        public HttpResponseMessage GetToUsersForUserRequest(string LoginName, int UserRequestId, int selectedToUserIfAny, bool IsForward = false, bool IsForCcUsers = false)
+        public HttpResponseMessage GetToUsersForUserRequest(string LoginName, int UserRequestId, string selectedToUserIfAny, bool IsForward = false, bool IsForCcUsers = false)
         {
             int noOfRecords = default(int);
             int totalCount = default(int);
             string orderBy = "";
             string sortOrder = "";
             string SearchCondition = string.Empty;
+            if (!string.IsNullOrEmpty(ConverterHelper.CheckSingleQuote(selectedToUserIfAny)))
+            {
+                selectedToUserIfAny=selectedToUserIfAny.Replace(';', ',');
+            }
 
             if (IsForCcUsers)
             {
@@ -233,7 +237,7 @@ namespace VirtusMobileAPI.Controllers
         public HttpResponseMessage SaveOrSendUserRequest([FromBody]dynamic newUserRequestActionData)
         {
 
-            int userRequestId=default(int);
+            int userRequestId = default(int);
 
             bool bSuccess = default(bool);
             try

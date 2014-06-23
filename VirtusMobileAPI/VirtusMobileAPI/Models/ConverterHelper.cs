@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace VirtusMobileService.Models
+namespace VirtusMobileAPI.Models
 {
     public class ConverterHelper
     {
@@ -200,5 +200,7 @@ namespace VirtusMobileService.Models
         #endregion
     }
 
+
+ 
 
 }

@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using VirtusBI;
 using VirtusDataModel;
-using VirtusMobileService.Models;
+using VirtusMobileAPI.Models;
 
 namespace VirtusMobileAPI.Controllers
 {
