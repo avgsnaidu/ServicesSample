@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using EPMEnums;
 using Microsoft.VisualBasic;
@@ -862,7 +863,7 @@ namespace VirtusBI
             }
         }
 
-        public bool fnSaveAttachFile(int objType, DataRow row, int iRecordId, string sLoginUserId, ref string sNewFileId)
+        public bool fnSaveAttachFile(int objType, DataRow row, int iRecordId, string sLoginUserId, byte[] fileContent,byte[] smallThumb,byte[] LargeThumb, ref string sNewFileId)
         {
             try
             {
@@ -894,7 +895,11 @@ namespace VirtusBI
                 else if (row["Extension"].ToString().ToLower() == ".zip")
                     strContentType = "zip";
 
-                if (row["FileId"] == DBNull.Value || row["FileId"].ToString() == "")
+
+
+              
+
+                if (row["FileId"] == DBNull.Value || row["FileId"].ToString() == "" || row["FileId"].ToString() == "0")
                 {
                     //insert the record.
                     strSql = "Insert into Files(ObjectType, ObjectId, FName, FExtension,";
@@ -908,12 +913,12 @@ namespace VirtusBI
 
 
 
-                    if ((bool)row["IsVersioned"] == true)
+                    if (Convert.ToBoolean(row["IsVersioned"]) == true)
                     { strSql += "1,"; }
                     else
                     { strSql += "0,"; }
 
-                    if ((bool)row["IsProtected"] == true && row["Password"].ToString() != "")
+                    if (Convert.ToBoolean(row["IsProtected"]) == true && row["Password"].ToString() != "")
                     {
                         strSql += "1,";
                     }
@@ -924,7 +929,7 @@ namespace VirtusBI
                     else
                         strSql += "Null,";
 
-                    if (row["IsCheckedOut"] != DBNull.Value && (bool)row["IsCheckedOut"] == true)
+                    if (row["IsCheckedOut"] != DBNull.Value && Convert.ToBoolean(row["IsCheckedOut"]) == true)
                     {
                         strSql += "1,";
                         strSql += Common.EncodeNString(row["CheckedOutBy"].ToString()) + ",";
@@ -942,7 +947,7 @@ namespace VirtusBI
 
                     strSql += row["DocRecordType"].ToString();
 
-                    if ((bool)row["IsInvoice"] == true)
+                    if (Convert.ToBoolean(row["IsInvoice"]) == true)
                     { strSql += ",1"; }
                     else
                     { strSql += ",0"; }
@@ -1001,66 +1006,65 @@ namespace VirtusBI
                         cmd.Parameters.Add("@SmallThumb", SqlDbType.Image);
                         cmd.Parameters.Add("@LargeThumb", SqlDbType.Image);
 
-                        if (row["PhysicalPath"] != null && row["PhysicalPath"].ToString() != "")
+                        //if (row["PhysicalPath"] != null && row["PhysicalPath"].ToString() != "")
+                        //{
+                        //    if (File.Exists(row["PhysicalPath"].ToString()))
+                        //    {
+                        //        byte[] strFile = null;
+                        //        strFile = GetByteArray(row["PhysicalPath"].ToString());
+                        if (fileContent != null && fileContent.ToString() != "")
                         {
-                            if (File.Exists(row["PhysicalPath"].ToString()))
-                            {
-                                byte[] strFile = null;
-                                strFile = GetByteArray(row["PhysicalPath"].ToString());
-                                if (strFile != null)
-                                    cmd.Parameters["@FileContent"].Value = strFile;
-                                else
-                                    cmd.Parameters["@FileContent"].Value = DBNull.Value;
+                            cmd.Parameters["@FileContent"].Value = fileContent;
 
-                                if (row["SmallThumb"] != null)
-                                    cmd.Parameters["@SmallThumb"].Value = row["SmallThumb"];
-                                else
-                                    cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
-
-                                if (row["LargeThumb"] != null)
-                                    cmd.Parameters["@LargeThumb"].Value = row["LargeThumb"];
-                                else
-                                    cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
-                            }
+                            if (smallThumb != null)
+                                cmd.Parameters["@SmallThumb"].Value = smallThumb;
                             else
-                            {
-                                cmd.Parameters["@FileContent"].Value = DBNull.Value;
                                 cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
+
+                            if (LargeThumb != null)
+                                cmd.Parameters["@LargeThumb"].Value = LargeThumb;
+                            else
                                 cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
-                            }
                         }
                         else
                         {
                             cmd.Parameters["@FileContent"].Value = DBNull.Value;
-
-                            if (row["ShortcutPath"] != null && row["ShortcutPath"].ToString() != "")
-                            {
-                                if (File.Exists(row["ShortcutPath"].ToString()))
-                                {
-                                    byte[] strFile = null;
-                                    strFile = GetByteArray(row["ShortcutPath"].ToString());
-                                    if (row["SmallThumb"] != null)
-                                        cmd.Parameters["@SmallThumb"].Value = row["SmallThumb"];
-                                    else
-                                        cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
-
-                                    if (row["LargeThumb"] != null)
-                                        cmd.Parameters["@LargeThumb"].Value = row["LargeThumb"];
-                                    else
-                                        cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
-                                }
-                                else
-                                {
-                                    cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
-                                    cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
-                                }
-                            }
-                            else
-                            {
-                                cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
-                                cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
-                            }
+                            cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
+                            cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
                         }
+                        //}
+                        //else
+                        //{
+                        //    cmd.Parameters["@FileContent"].Value = DBNull.Value;
+
+                        //    if (row["ShortcutPath"] != null && row["ShortcutPath"].ToString() != "")
+                        //    {
+                        //        if (File.Exists(row["ShortcutPath"].ToString()))
+                        //        {
+                        //            byte[] strFile = null;
+                        //            strFile = GetByteArray(row["ShortcutPath"].ToString());
+                        //            if (row["SmallThumb"] != null)
+                        //                cmd.Parameters["@SmallThumb"].Value = row["SmallThumb"];
+                        //            else
+                        //                cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
+
+                        //            if (row["LargeThumb"] != null)
+                        //                cmd.Parameters["@LargeThumb"].Value = row["LargeThumb"];
+                        //            else
+                        //                cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
+                        //        }
+                        //        else
+                        //        {
+                        //            cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
+                        //            cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        cmd.Parameters["@SmallThumb"].Value = DBNull.Value;
+                        //        cmd.Parameters["@LargeThumb"].Value = DBNull.Value;
+                        //    }
+                        //}
 
                         cmd.CommandText = strSql;
                         Common.dbMgr.ExecuteNonQuery(cmd);
@@ -1125,29 +1129,22 @@ namespace VirtusBI
 
                     System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
                     cmd.CommandType = CommandType.Text;
-                    if (row["PhysicalPath"] != null && row["PhysicalPath"].ToString() != "")
+                    if (fileContent!= null && fileContent.ToString() != "")
                     {
                         cmd.Parameters.Add("@FileContent", SqlDbType.Image);
                         strSql += ",FileContent=@FileContent ";
 
-                        if (File.Exists(row["PhysicalPath"].ToString()))
-                        {
-                            byte[] strFile = null;
-                            strFile = GetByteArray(row["PhysicalPath"].ToString());
-                            //Common.GetThumbs(row["PhysicalPath"].ToString(), ref strSmallThumb, ref strLargeThumb);
-
-                            if (strFile != null)
-                                cmd.Parameters["@FileContent"].Value = strFile;
-                            else
-                                cmd.Parameters["@FileContent"].Value = DBNull.Value;
-
-                        }
+                        if (fileContent!= null)
+                            cmd.Parameters["@FileContent"].Value = fileContent;
                         else
-                        {
                             cmd.Parameters["@FileContent"].Value = DBNull.Value;
 
-                        }
                     }
+                    //else
+                    //{
+                    //    cmd.Parameters["@FileContent"].Value = DBNull.Value;
+
+                        //}
                     else
                     {
                         strSql += ",FileContent=NULL ";
@@ -1159,7 +1156,6 @@ namespace VirtusBI
                     cmd.CommandText = strSql;
                     Common.dbMgr.ExecuteNonQuery(cmd);
 
-
                 }
 
 
@@ -1170,7 +1166,7 @@ namespace VirtusBI
                 throw ex;
             }
         }
-        
+
 
 
 
@@ -1406,8 +1402,20 @@ namespace VirtusBI
             catch (Exception ex)
             { throw ex; }
         }
+        
+        ////public class FileContentCollection
+        ////{
+        ////    public FileContentCollection() { }
+        ////    public FileContentCollection(byte[] fileContent, byte[] largeThumb, byte[] smallThumb)
+        ////    {
+        ////        this.FileContent = fileContent;
+        ////        this.LargeThumb = largeThumb;
+        ////        this.SmallThumb = smallThumb;
+        ////    }
 
-
-
+        ////    public byte[] FileContent { get; set; }
+        ////    public byte[] LargeThumb { get; set; }
+        ////    public byte[] SmallThumb { get; set; }
+        ////}
     }
 }

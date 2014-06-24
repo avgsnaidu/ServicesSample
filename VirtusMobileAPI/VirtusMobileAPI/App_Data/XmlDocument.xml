@@ -1,0 +1,835 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtusMobileAPI</name>
+    </assembly>
+    <members>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:VirtusMobileAPI.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,VirtusMobileAPI.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,VirtusMobileAPI.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:VirtusMobileAPI.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},VirtusMobileAPI.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:VirtusMobileAPI.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.#ctor(VirtusMobileAPI.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,VirtusMobileAPI.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:VirtusMobileAPI.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VirtusMobileAPI.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:VirtusMobileAPI.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VirtusMobileAPI.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.GetMyContractsList(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns records related/specific to loginUser with done or processed filter.
+            </summary>
+            <param name="LoginUserName">login user name</param>
+            <param name="IsProcessed">Is contract is processed or not (it depends on project status)</param>
+            <param name="IsUnDone">Is contract is done or not.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.GetContractsList(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            It gets the all the details of contracts which is accessible to login User with done or processed filter.
+            </summary>
+            <param name="LoginUserName"> login user name</param>
+            <param name="IsProcessed">Is contract is processed or not (it depends on project status)</param>
+            <param name="IsUnDone">Is contract is done or not.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.GetContractDetails(System.Int32)">
+            <summary>
+            Returns Contract Details
+            </summary>
+            <param name="contractId"> Contractid of record.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.GetContractMilestoneDetails(System.String,System.Int32)">
+            <summary>
+            Returns the Contract Milestones details if it has any already save milestones.
+            </summary>
+            <param name="contractId">contract id </param>
+            <param name="objectType">Object Type for contractId like - 27 </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.GetContractorsList(System.String)">
+            <summary>
+            Returns the list Contractors details associated with the Tender and Contract.
+            </summary>
+            <param name="designId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.ContractController.SaveContractDetails(System.Int32,System.Boolean,System.String,System.Int32,VirtusDataModel.ContractSaveActionData)">
+            <summary>
+            For Saving the Contract Details and Creating the Project Call this service.
+            </summary>
+            <param name="RecordId"></param>
+            <param name="createProject"> If you need to create the Project the - True otherwise false</param>
+            <param name="userInitials"></param>
+            <param name="parentId"></param>
+            <param name="data"> Penality Type values is like : PerDay = 1,PerWeek = 2,PerMonth = 3,Percentage = 4,Amount = 5</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetFileDetails(System.Int32)">
+            <summary>
+            Returns the Details of the File/Document requested.
+            </summary>
+            <param name="fileId">Id of the requested file </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.SaveFileOrDocument(System.Int32,System.Int32,System.String,VirtusMobileAPI.Models.DocumentActionData)">
+            <summary>
+            Saves the File or document related to specific Object.
+            </summary>
+            <param name="objectTypeId">Objects Type Id </param>
+            <param name="recordId">RecordId of the specific object in which the current documents relates to</param>
+            <param name="loginUserId">login userId</param>
+            <param name="documentDetails">Document details for saving.</param>
+            <returns> file Id of saved File/Document</returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.GetDesignTenderConsultants(System.Int32)">
+            <summary>
+            Get all the tender Consultants of the Tender by providing the Tender Id
+            </summary>
+            <param name="tenderId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.GetAvailableConsultants(System.String,System.Int32,System.String)">
+            <summary>
+             Get all the Available Consultants or Vendors for tender process
+            </summary>
+            <param name="loginName"> Login username in string type</param>
+            <param name="deleteFlagedAddressList"> If alredy Consultants exists in the list,  then specify the list of addressid which has the Flag value as 'D' with comman separated like : "addressId,addressId2"  otherwise simplay pass empty value</param>
+            <param name="noOfRecordsToFetch"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.GetMyDesignTendersList(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns the all the list of Desings or Tenders specific to login User
+            </summary>
+            <param name="LoginUserName"></param>
+            <param name="IsDesign"> Is design - " true " else if it is Tender - "false "</param>
+            <param name="IsUnDone">what records you want wheather done or undone records.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.GetDesignTendersList(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns all List of Designs or Tenders i.e other user related records also returns.
+            </summary>
+            <param name="LoginUserName">login username</param>
+            <param name="IsDesign">if it is tender - "False"</param>
+            <param name="IsUnDone"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.InsertBasicTenderContracts(VirtusDataModel.TenderContractActionData)">
+             <summary>
+             Creating the new Contract Details after the Approving the tender 
+             </summary>
+             <param name="data"> Here need to pass the following the Details regarding the TenderContractActionData  
+              (int )UserReqeustId ,(int)TenderRecordId ,(string) Subject ,(string) NewCodeToContract ,(string) CreatedBy ,
+             If you Need to Create Tender -> IsNeedToCreateTender =True else IsNeedToCreateTender =False  ,
+            (string )NewDesignContractCode=""
+             </param>
+             <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.TenderController.SaveTenderDetails(System.Int32,System.Boolean,VirtusDataModel.TenderUpdateActionData)">
+            <summary>
+            Saving TenderDetails or Creating the Contract for the particular Tender by passing DesingId/TenderId with TenderUpdateActionData which has 
+            parameter as TenderActionData Type and list of TenderConsultantActionData Type data -- 
+            After saving Tender need to Create the Tender Contract by calling the Service "InsertTenderContracts"
+            </summary>
+            <param name="recordId"></param>
+            <param name="IsDesign"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VirtusMobileAPI.Controllers.UserRequestController">
+            <summary>
+            UserRequest Related Services
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.UserRequestController.GetUserRequestDetails(System.Int32,System.String)">
+            <summary>
+            Get the Details of the UserRequests (but if here the list didn't have ToPerson ,to whom the request is passed then
+            To Get the userrequest To-UserId, need to Call the Service "GetUserRequestToUser")
+            </summary>
+            <param name="Id"></param>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.UserRequestController.GetToUsersForUserRequest(System.String,System.Int32,System.String,System.Boolean,System.Boolean)">
+            <summary>
+             To Get the list of  available persons for To-Users or Cc-Users list
+            </summary>
+            <param name="LoginName"></param>
+            <param name="UserRequestId">For new Request pass default value of int i.e " 0 " </param>
+            <param name="IsForward"> True if it to fill forward persons list</param>
+            <param name="IsForCcUsers"> True if it to fill Cc-Users persons list</param>
+            <param name="selectedToUserIfAny"> pass the selectedToUserId If Any otherwise pass '0' </param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.UserRequestController.GetUserRequestToUser(System.Int32)">
+            <summary>
+             Get the ToUserId of userRequest based on UserRequestId
+            </summary>
+            <param name="userRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.UserRequestController.SaveOrSendUserRequest(System.Object)">
+            <summary>
+            For sending the New UserRequest, need to pass the NewRequestActionData Type in json String format
+            </summary>
+            <param name="userRequestId"></param>
+            <param name="newUserRequestActionData"> Need to pass the sample data like :  {  "Code": "sample string 1",   "RequestType": 2,   "Subject": "sample string 3",   "InitialBudget": 4.0,   "Description": "sample string 5",   "CreatedBy": "sample string 6",  "CreatedOn": "2014-06-09",   "ModifiedBy": "sample string 7",   "ModifiedOn": "2014-06-09",   "Status": 8,   "IsActive": true,   "DepartmentId": 10,   "ToUserids": "sample string 11",   "ToUserId": 12,   "ToCCUsers": "sample string 13",   "Comments": "sample string 14",   "RequestDate": "2014-06-09",  "IsSaveDraft": true} </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.UserRequestController.HoldOrProcessUserRequest(System.Int32,System.Object)">
+            <summary>
+            
+            This service is used to Process the "User Request" for next steps, by providing the meaning full values.     
+            This service is used to implement following actions like :  "Approve", "Approve and Forward ", " Need More Info ", "Reject ", "Hold "   - 
+            For Approving the Request Need to Change the Staus with following like : Status = (int)Enums.ObjectStatus.Approved,   CreateNextStep = true  , DoneDate = current date , IsDone = true ,  ModifiedBy = "loginUserName " ,  IsSaveDraft = false ,IsKeptHold = false etc..
+            Here while approving CreateNextStep should be true for creating next Object like tender or contract.   
+            For Approving and Forward need to  CreateNextStep = false , Status = (int)Enums.ObjectStatus.Approve_Forward ,IsDone=false   
+            For Hold --  CreateNextStep = false , Status = (int)Enums.ObjectStatus.Hold ,IsDone=false , IsKeptHold = true ,AlreadyApproved = true
+            For Need More Info --  CreateNextStep = false , Status =  (int)Enums.ObjectStatus.NeedMoreinfo ,IsDone=false , IsKeptHold = false
+            </summary>
+            <param name="userRequestId"> UserRequestId for which status to be changed</param>
+            <param name="editUserRequestActionData">need to pass json-type string data sample like :          {  "RequestComponents": "sample string 1",  "OriginalSubject": "sample string 2",  "DeadlineRemind": true,  "DeadlineReminderDays": 4,  "DeadlineEndDate": "2014-06-09",  "AlreadyApproved": true,  "OriginalStatus": 6,  "IsArchived": true,  "IsManualCode": true,  "OriginalRequest": 9,  "DesignContractCode": "sample string 10",  "IsDesign": true,  "CreateNextStep": true,  "HoldUntilDate": "2014-06-09",  "HoldRemindDays": 13,  "IsKeptHold": true,  "OldReminderMonths": 15,  "IsHoldRemind": true,  "IsDone": true,  "DoneDate": "2014-06-09T12:41:55.8755868+05:30",  "IsDesignRequired": true,  "IsTenderRequired": true,  "IsContractRequired": true,  "ForwardedTo": "sample string 21",  "ForwardedOn": "2014-06-09",  "Project": 22,  "OriginalReqProject": 23,  "UserRequestId_Old": 24,  "IsRead": true,  "PriorityId": 26,  "OriginalRequestId": 27,  "Code": "sample string 28",  "RequestType": 29,  "Subject": "sample string 30",  "InitialBudget": 31.0,  "Description": "sample string 32",  "CreatedBy": "sample string 33",  "CreatedOn": "2014-06-09",  "ModifiedBy": "sample string 34",  "ModifiedOn": "2014-06-09",  "Status": 35,  "IsActive": true,  "DepartmentId": 37,  "ToUserids": "sample string 38",  "ToUserId": 39,  "ToCCUsers": "sample string 40",  "Comments": "sample string 41",  "RequestDate": "2014-06-09",  "IsSaveDraft": true} </param>
+            <returns> If action is sucess then is will give Status Code as : 200 other wise, it may give status code : 400 which is an error.</returns>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.FileId">
+            <summary>
+            Id of the Current uploading /saving documentId.For new record it will be empty.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Size">
+            <summary>
+            Size of the Documents like "2 MB", "1 GB", 200 byte etc..
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.SizeBytes">
+            <summary>
+            Size in Bytes
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.DocRecordType">
+            <summary>
+            Document Record Type Values for =>   Actual = 0, ManualEntry = 1, Link = 2, SubObject = 3, MinutesBook = 4, Shortcut = 5
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ObjectType">
+            <summary>
+            Pass one of the string type -ObjectType Name in the list {"Organisation" ,"Person",  "Contact" ,"Project", "Task" ,"Decision" ,"Meeting","Agenda Item" , "User Request", "Design" , "Tender","Contract" , "Gatepass"}
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ObjectCode">
+            <summary>
+            Pass the code of the related object record to,to which current file is attaching.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ObjectTitle">
+            <summary>
+             Pass the Title of the related object record to,to which current file is attaching.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.FileName">
+            <summary>
+            Name of the file
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Extension">
+            <summary>
+            Extension of the file
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.FileType">
+            <summary>
+            provide the "File type " which is from file properties.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Password">
+            <summary>
+            If it is protected then specify the password other wise empty.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Version">
+            <summary>
+            If the file is new then,spcifiy the "Version"=1 other wise increment of previous version
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.DBVersion">
+            <summary>
+            By Default Empty
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Title">
+            <summary>
+            Title of the File
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Subject">
+            <summary>
+            Subject of the File if any
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Author">
+            <summary>
+            author of the file.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Category">
+            <summary>
+            category of the file
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.Keywords">
+            <summary>
+            key words if the file contains any.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.CheckedOutBy">
+            <summary>
+            if the document is checked out then provide the checkedout by login name.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.RecordCreatedBy">
+            <summary>
+            File Record created by(login username)
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ChangeType">
+            <summary>
+            Change Type is like "N" for new , "M" for Modified , "D" for Deleted etc.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.IsVersioned">
+            <summary>
+            if the record already exists and doing updations then IsVersioned=true.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.IsProtected">
+            <summary>
+            By default false
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.IsCheckedOut">
+            <summary>
+            If the file is Checked out then it's value is true.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.IsInvoice">
+            <summary>
+            if the file related to Invoice type "IsInVoice"=true else it is flase.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.CreationDate">
+            <summary>
+            These value is from file properties
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ModificationDate">
+            <summary>
+            These value is from file properties.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.CheckedOutOn">
+            <summary>
+            If any body checked out then specify the checkedout date
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.RecordCreatedOn">
+            <summary>
+            File or document Uploaded date
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.RecordModifiedOn">
+            <summary>
+            For new File or Document it should be null
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.ShortCutPath">
+            <summary>
+            fill by default with emptyString
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.FileContent">
+            <summary>
+            Pass the content of the file as array of bytes
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.LargeThumb">
+            <summary>
+            pass the file content that's matches for large thumbs , for viewing in Large thumbs 
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.DocumentActionData.SmallThumb">
+            <summary>
+            pass the file content that's matches for format of small thumbs, for viewing in small thumbs
+            </summary>
+        </member>
+    </members>
+</doc>

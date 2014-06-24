@@ -40,6 +40,9 @@ namespace VirtusMobileAPI.Controllers
         [Route("SaveFile/{objectTypeId}/{recordId}/{loginUserId}")]
         public HttpResponseMessage SaveFileOrDocument(int objectTypeId, int recordId, string loginUserId, [FromBody]DocumentActionData documentDetails)
         {
+            if(documentDetails==null)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Provide valid document details,those should not be null.");
+
             var dt = ConverterHelper.ConvertToDataTable(new List<DocumentActionData>() { documentDetails });
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -47,8 +50,12 @@ namespace VirtusMobileAPI.Controllers
                 string savedFileId = string.Empty;
                 try
                 {
+                    var fileContent = documentDetails.FileContent;
+                    var smallThumbContent = documentDetails.SmallThumb;
+                    var largeThumbContent = documentDetails.LargeThumb;
+
                     repository.BeginTrans();
-                    var result = repository.fnSaveAttachFile(objectTypeId, dr, recordId, loginUserId, ref savedFileId);
+                    var result = repository.fnSaveAttachFile(objectTypeId, dr, recordId, loginUserId, fileContent, smallThumbContent, largeThumbContent , ref savedFileId);
                     repository.CommitTrans();
                     return Request.CreateResponse(HttpStatusCode.OK, new { SavedSuccessfully = result, SavedFileId = savedFileId }, Configuration.Formatters.JsonFormatter);
 

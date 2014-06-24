@@ -8,9 +8,9 @@ namespace VirtusMobileAPI.Models
     public class DocumentActionData
     {
         /// <summary>
-        /// Id of the Current uploading /saving documentId.For new record it may 0.
+        /// Id of the Current uploading /saving documentId.For new record it will be empty.
         /// </summary>
-        public int FileId { get; set; }
+        public string FileId { get; set; }
         
         /// <summary>
         /// Size of the Documents like "2 MB", "1 GB", 200 byte etc..
@@ -142,6 +142,11 @@ namespace VirtusMobileAPI.Models
         /// For new File or Document it should be null
         /// </summary>
         public DateTime? RecordModifiedOn { get; set; }
+
+        /// <summary>
+        /// fill by default with emptyString
+        /// </summary>
+        public string ShortCutPath { get; set; }
 
         /// <summary>
         /// Pass the content of the file as array of bytes
