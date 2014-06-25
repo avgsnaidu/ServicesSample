@@ -11,7 +11,7 @@ namespace VirtusMobileAPI.Models
         /// Id of the Current uploading /saving documentId.For new record it will be empty.
         /// </summary>
         public string FileId { get; set; }
-        
+
         /// <summary>
         /// Size of the Documents like "2 MB", "1 GB", 200 byte etc..
         /// </summary>
@@ -53,8 +53,8 @@ namespace VirtusMobileAPI.Models
         public string FileType { get; set; }
 
         public string Location { get; set; }
-       
-          
+
+
         /// <summary>
         /// If it is protected then specify the password other wise empty.
         /// </summary>
@@ -167,4 +167,20 @@ namespace VirtusMobileAPI.Models
 
     }
 
+    public class TenderLetterActionData
+    {
+        /// <summary>
+        /// Name of the genartad tender file 
+        /// </summary>
+        public string FileName { get; set; }
+        /// <summary>
+        /// file extension for the file
+        /// </summary>
+        public string Extension { get; set; }
+
+        /// <summary>
+        /// file content in array of bytes.
+        /// </summary>
+        public byte[] FileContent { get; set; }
+    }
 }

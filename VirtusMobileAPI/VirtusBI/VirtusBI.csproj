@@ -61,6 +61,7 @@
     <Compile Include="clsDesignTenders.cs" />
     <Compile Include="clsDocuments.cs" />
     <Compile Include="clsLogin.cs" />
+    <Compile Include="clsPerformance.cs" />
     <Compile Include="clsProjectTask.cs" />
     <Compile Include="clsUserRequests.cs" />
     <Compile Include="Common.cs" />

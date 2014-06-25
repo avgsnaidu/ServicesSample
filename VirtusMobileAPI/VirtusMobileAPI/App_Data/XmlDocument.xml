@@ -532,11 +532,50 @@
             <param name="data"> Penality Type values is like : PerDay = 1,PerWeek = 2,PerMonth = 3,Percentage = 4,Amount = 5</param>
             <returns></returns>
         </member>
+        <member name="T:VirtusMobileAPI.Controllers.DocumentsController">
+            <summary>
+            All the Document related action services for each object.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetDocumentTypeList(System.Int32)">
+            <summary>
+            Returns the List of Document Types (which relates to objects).
+            </summary>
+            <param name="fileId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetSingleFileDetails(System.Int32,System.String,System.String)">
+            <summary>
+            Get the single document information
+            </summary>
+            <param name="objectRecordId"></param>
+            <param name="fileId"></param>
+            <param name="loginName"></param>
+            <returns></returns>
+        </member>
         <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetFileDetails(System.Int32)">
             <summary>
             Returns the Details of the File/Document requested.
             </summary>
             <param name="fileId">Id of the requested file </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetObjectRecordDocumentsList(System.Int32,System.Int32,System.String)">
+            <summary>
+            Retruns the list of documents/files corresponding to the object recordId.
+            </summary>
+            <param name="objectType"></param>
+            <param name="recordId"></param>
+            <param name="loginName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.SaveGenaratedTenderLetter(System.Int32,System.String,VirtusMobileAPI.Models.TenderLetterActionData)">
+            <summary>
+            For Saving the Genarated Tender letter.
+            </summary>
+            <param name="tenderId">tender Id for which the letter is genarated</param>
+            <param name="loginUser">current login username</param>
+            <param name="genaratedTenderLetterData">genarated tender letter saving content/information.</param>
             <returns></returns>
         </member>
         <member name="M:VirtusMobileAPI.Controllers.DocumentsController.SaveFileOrDocument(System.Int32,System.Int32,System.String,VirtusMobileAPI.Models.DocumentActionData)">
@@ -548,6 +587,23 @@
             <param name="loginUserId">login userId</param>
             <param name="documentDetails">Document details for saving.</param>
             <returns> file Id of saved File/Document</returns>
+        </member>
+        <member name="T:VirtusMobileAPI.Controllers.PerformanceController">
+            <summary>
+            Timesheet Services to do all actions related to persons services/expances of particular project or Task.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetTaskServiceTypeList">
+            <summary>
+            Returns the list of Services would perform for the Project or Task
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetProductsTypeList">
+            <summary>
+            Retruns the list of products in which expenses would be done
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:VirtusMobileAPI.Controllers.TenderController.GetDesignTenderConsultants(System.Int32)">
             <summary>
@@ -829,6 +885,21 @@
         <member name="P:VirtusMobileAPI.Models.DocumentActionData.SmallThumb">
             <summary>
             pass the file content that's matches for format of small thumbs, for viewing in small thumbs
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.TenderLetterActionData.FileName">
+            <summary>
+            Name of the genartad tender file 
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.TenderLetterActionData.Extension">
+            <summary>
+            file extension for the file
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.TenderLetterActionData.FileContent">
+            <summary>
+            file content in array of bytes.
             </summary>
         </member>
     </members>

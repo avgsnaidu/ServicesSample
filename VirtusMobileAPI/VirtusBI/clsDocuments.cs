@@ -43,7 +43,7 @@ namespace VirtusBI
         }
 
 
-        public DataSet GetDocDataset(Enums.VTSObjects objType, int iRecordId, bool bShowFromSubObjects, int iUILanguageId, bool bProjectViewRight, bool bTaskViewRight, bool bDecisionViewRight, bool bAgendaItemViewRight, bool bMeetingViewRight, string strLoginName)
+        public DataSet GetDocDataset(int objType, int iRecordId, bool bShowFromSubObjects, int iUILanguageId, bool bProjectViewRight, bool bTaskViewRight, bool bDecisionViewRight, bool bAgendaItemViewRight, bool bMeetingViewRight, string strLoginName)
         {
             DataSet ds = new DataSet();
             try
@@ -70,7 +70,7 @@ namespace VirtusBI
                 sPrm.SqlDbType = System.Data.SqlDbType.Int;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@UILanguageId";
-                sPrm.Value = iUILanguageId;
+                sPrm.Value = CommonVariable.iLanguageId;
                 sPrms[++iIndex] = sPrm;
 
 
@@ -148,7 +148,7 @@ namespace VirtusBI
         }
 
 
-        private DataSet GetSubObjectsDataset(Enums.VTSObjects objType, int iRecordId, int iUILanguageId, bool bProjectViewRight, bool bTaskViewRight, bool bDecisionViewRight, bool bAgendaItemViewRight, bool bMeetingViewRight, string strLoginName)
+        private DataSet GetSubObjectsDataset(int objType, int iRecordId, int iUILanguageId, bool bProjectViewRight, bool bTaskViewRight, bool bDecisionViewRight, bool bAgendaItemViewRight, bool bMeetingViewRight, string strLoginName)
         {
             DataSet ds = new DataSet();
             try
@@ -160,7 +160,7 @@ namespace VirtusBI
                 sPrm.SqlDbType = System.Data.SqlDbType.Int;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@ObjectTypeId";
-                sPrm.Value = (int)objType;
+                sPrm.Value = objType;
                 sPrms[iIndex] = sPrm;
 
                 sPrm = new SqlParameter();
@@ -174,7 +174,7 @@ namespace VirtusBI
                 sPrm.SqlDbType = System.Data.SqlDbType.Int;
                 sPrm.Direction = ParameterDirection.Input;
                 sPrm.ParameterName = "@UILanguageId";
-                sPrm.Value = iUILanguageId;
+                sPrm.Value = CommonVariable.iLanguageId;
                 sPrms[++iIndex] = sPrm;
 
 
@@ -1223,20 +1223,20 @@ namespace VirtusBI
         //}
 
 
-        public bool fnSaveGeneratedTenderLetter(int iTenderID, string sReportPath, string sLoginUserId)
+        public bool fnSaveGeneratedTenderLetter(int iTenderID, string sLoginUserId,string fileName,string Extension,byte[] FileContent)
         {
             Common.dbMgr.BeginTrans();
             try
             {
-                FileInfo fi = new FileInfo(sReportPath);
-                byte[] strFile = null;
-                if (sReportPath != "")
-                {
-                    if (File.Exists(sReportPath))
-                    {
-                        strFile = GetByteArray(sReportPath);
-                    }
-                }
+                //FileInfo fi = new FileInfo(sReportPath);
+                //byte[] strFile = null;
+                //if (sReportPath != "")
+                //{
+                //    if (File.Exists(sReportPath))
+                //    {
+                //        strFile = GetByteArray(sReportPath);
+                //    }
+                //}
 
                 string sSql = "";
                 //insert new file.
@@ -1244,8 +1244,8 @@ namespace VirtusBI
                 sSql += " IsVersioned, IsProtected, IsCheckedOut, RecordType) Values(";
                 sSql += ((int)Enums.VTSObjects.Tenders).ToString() + ",";
                 sSql += iTenderID.ToString() + ",";
-                sSql += Common.EncodeNString(fi.Name) + ",";
-                sSql += Common.EncodeNString(fi.Extension) + ",";
+                sSql += Common.EncodeNString(fileName) + ",";
+                sSql += Common.EncodeNString(Extension) + ",";
                 sSql += "0,0,0," + ((int)Enums.DocRecordType.Actual).ToString() + ")";
 
                 Common.dbMgr.ExecuteNonQuery(CommandType.Text, sSql);
@@ -1271,8 +1271,8 @@ namespace VirtusBI
 
                     cmd.Parameters.Add("@FileContent", SqlDbType.Image);
 
-                    if (strFile != null)
-                        cmd.Parameters["@FileContent"].Value = strFile;
+                    if (FileContent != null)
+                        cmd.Parameters["@FileContent"].Value = FileContent;
                     else
                         cmd.Parameters["@FileContent"].Value = DBNull.Value;
 
