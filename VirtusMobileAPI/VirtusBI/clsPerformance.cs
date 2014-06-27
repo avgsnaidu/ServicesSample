@@ -9,7 +9,7 @@ using Microsoft.VisualBasic;
 
 namespace VirtusBI
 {
-    public class clsPerformance
+    public class clsPerformance : clsBaseBI
     {
 
         public DataSet fnGetPreformanceServiceDataSet(int iObjType, int iObjID, bool bSubObjects, bool bClearedTask, bool bViewRight)
@@ -166,7 +166,7 @@ namespace VirtusBI
             }
         }
 
-        public DataSet fnGetObjectPerformedByDropdown(int bIsExpenses, int iObjectTypeId, int iObjectId, string strCurrentUsers)
+        public DataSet fnGetObjectPerformedByDropdown(bool bIsExpenses, int iObjectTypeId, int iObjectId, string strCurrentUsers)
         {
             try
             {
@@ -198,6 +198,149 @@ namespace VirtusBI
             {
                 throw ex;
             }
+        }
+
+        public DataSet fnGetPerformedByDropdown(bool bIsExpenses, DateTime dtFromDate, DateTime dtToDate, int iUserId)
+        {
+            try
+            {
+                SqlParameter[] Params = new SqlParameter[4];
+                int iIndex = 0;
+
+
+                Params[iIndex] = new SqlParameter("@IsExpenses", SqlDbType.Bit);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = bIsExpenses;
+
+                Params[++iIndex] = new SqlParameter("@FromDate", SqlDbType.DateTime);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = dtFromDate;
+
+                Params[++iIndex] = new SqlParameter("@ToDate", SqlDbType.DateTime);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = dtToDate;
+
+                Params[++iIndex] = new SqlParameter("@LoginUserId", SqlDbType.Int);
+                Params[iIndex].Direction = ParameterDirection.Input;
+                Params[iIndex].Value = iUserId;
+
+
+
+                return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetPerformancesUsers", Params);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public DataSet fnGetProjectDropdowns(int iUserId, DateTime dtFromDate, DateTime dtToDate, bool bIsExpenses, string strExistingIds)
+        {
+            //@IsProject int, @LoginUserId int,@FromDate Datetime,@ToDate Datetime,@IsExpenses bit
+
+            SqlParameter[] sPrms = new SqlParameter[5];
+            SqlParameter sPrm = new SqlParameter();
+
+
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Int;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@LoginUserId";
+            sPrm.Value = iUserId;
+            sPrms[0] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@FromDate";
+            sPrm.Value = dtFromDate;
+            sPrms[1] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ToDate";
+            sPrm.Value = dtToDate;
+            sPrms[2] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Bit;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@IsExpenses";
+            sPrm.Value = bIsExpenses;
+            sPrms[3] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.VarChar;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ExistingProjectIds";
+            sPrm.Value = strExistingIds;
+            sPrms[4] = sPrm;
+
+            return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetPerformancesProjectDropDownDS", sPrms);
+        }
+
+        public DataSet fnGetTasksDropdowns(int iUserId, DateTime dtFromDate, DateTime dtToDate, bool bIsExpenses, int iParentProjectId, string strExistingIds, bool bProjectViewRight)
+        {
+            //@IsProject int, @LoginUserId int,@FromDate Datetime,@ToDate Datetime,@IsExpenses bit
+
+            SqlParameter[] sPrms = new SqlParameter[7];
+            SqlParameter sPrm = new SqlParameter();
+
+
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Int;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@LoginUserId";
+            sPrm.Value = iUserId;
+            sPrms[0] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@FromDate";
+            sPrm.Value = dtFromDate;
+            sPrms[1] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ToDate";
+            sPrm.Value = dtToDate;
+            sPrms[2] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Bit;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@IsExpenses";
+            sPrm.Value = bIsExpenses;
+            sPrms[3] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Int;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ProjectId";
+            sPrm.Value = iParentProjectId;
+            sPrms[4] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.VarChar;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ExistingTaskIds";
+            sPrm.Value = strExistingIds;
+            sPrms[5] = sPrm;
+
+            sPrm = new SqlParameter();
+            sPrm.SqlDbType = System.Data.SqlDbType.Bit;
+            sPrm.Direction = ParameterDirection.Input;
+            sPrm.ParameterName = "@ProjectViewRight";
+            sPrm.Value = bProjectViewRight;
+            sPrms[6] = sPrm;
+
+
+            return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetPerformancesTasksDropDownDS", sPrms);
         }
 
         public DataSet fnGetPreformanceServicesDataSet(DateTime dtFromDate, DateTime dtToDate, int iUserId, bool bProjectViewRight, bool bTaskViewRight)
@@ -252,6 +395,57 @@ namespace VirtusBI
                 throw ex;
             }
         }
+        public DataSet fnGetPreformanceExpensesDataSet(DateTime dtFromDate, DateTime dtToDate, int iUserId, bool bProjectViewRight, bool bTaskViewRight)
+        {
+            try
+            {
+                SqlParameter[] sPrms = new SqlParameter[5];
+                SqlParameter sPrm = new SqlParameter();
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.Int;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@LoginUserId";
+                sPrm.Value = iUserId;
+                sPrms[0] = sPrm;
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@FromDate";
+                sPrm.Value = dtFromDate;
+                sPrms[1] = sPrm;
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.DateTime;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@ToDate";
+                sPrm.Value = dtToDate;
+                sPrms[2] = sPrm;
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.Bit;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@ProjectViewRight";
+                sPrm.Value = bProjectViewRight;
+                sPrms[3] = sPrm;
+
+                sPrm = new SqlParameter();
+                sPrm.SqlDbType = System.Data.SqlDbType.Bit;
+                sPrm.Direction = ParameterDirection.Input;
+                sPrm.ParameterName = "@TaskViewRight";
+                sPrm.Value = bTaskViewRight;
+                sPrms[4] = sPrm;
+
+
+                return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetPerformanceExpensesDS", sPrms);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
         public bool fnSavePerformances(DataSet dsService, DataSet dsExpenses, bool bServiceModify, bool bExpensesModify, int iUserId)
         {
@@ -288,8 +482,9 @@ namespace VirtusBI
                                 if (bTFlag)
                                     strSql += (int)Enums.VTSObjects.Project + "," + dsService.Tables[0].Rows[i]["ServiceProjectId"];
                             }
+                            if (dsService.Tables[0].Rows[i]["ServiceDate"].ToString() != string.Empty)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsService.Tables[0].Rows[i]["ServiceDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
 
-                            lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsService.Tables[0].Rows[i]["ServiceDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
 
                             strSql += ",cast(" + lngDate.ToString() + " as datetime)";
 
@@ -343,8 +538,8 @@ namespace VirtusBI
                                     strSql += " ObjectType = " + (int)Enums.VTSObjects.Project + ",ObjectId=" + dsService.Tables[0].Rows[i]["ServiceProjectId"];
                             }
 
-
-                            lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsService.Tables[0].Rows[i]["ServiceDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            if (dsService.Tables[0].Rows[i]["ServiceDate"].ToString() != string.Empty)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsService.Tables[0].Rows[i]["ServiceDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
 
                             strSql += ",ServiceDate=cast(" + lngDate.ToString() + " as datetime)";
 
@@ -414,8 +609,8 @@ namespace VirtusBI
                                 if (bTFlag)
                                     strSql += (int)Enums.VTSObjects.Project + "," + dsExpenses.Tables[0].Rows[i]["ProductProjectId"];
                             }
-
-                            lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            if (dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString() != string.Empty)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
 
                             strSql += ",cast(" + lngDate.ToString() + " as datetime)";
 
@@ -514,8 +709,8 @@ namespace VirtusBI
                                     strSql += " ObjectType = " + (int)Enums.VTSObjects.Project + ",ObjectId=" + dsExpenses.Tables[0].Rows[i]["ProductProjectId"];
                             }
 
-
-                            lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
+                            if (dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString() != string.Empty)
+                                lngDate = DateAndTime.DateDiff(DateInterval.Day, Common.SQLServerZeroDate, DateTime.Parse(dsExpenses.Tables[0].Rows[i]["ProductDate"].ToString()), FirstDayOfWeek.System, FirstWeekOfYear.System);
                             strSql += ",ProductDate=cast(" + lngDate.ToString() + " as datetime)";
 
                             strSql += ",PerformedBy=" + dsExpenses.Tables[0].Rows[i]["PerformedBy"];
@@ -605,6 +800,7 @@ namespace VirtusBI
                 throw (ex);
             }
         }
+
 
     }
 }

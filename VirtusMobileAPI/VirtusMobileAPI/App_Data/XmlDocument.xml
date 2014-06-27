@@ -544,6 +544,13 @@
             <param name="fileId"></param>
             <returns></returns>
         </member>
+        <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetFileName(System.Int32)">
+            <summary>
+            Returns the just file Name of the File.
+            </summary>
+            <param name="fileId">specify the fileId</param>
+            <returns></returns>
+        </member>
         <member name="M:VirtusMobileAPI.Controllers.DocumentsController.GetSingleFileDetails(System.Int32,System.String,System.String)">
             <summary>
             Get the single document information
@@ -588,6 +595,113 @@
             <param name="documentDetails">Document details for saving.</param>
             <returns> file Id of saved File/Document</returns>
         </member>
+        <member name="T:VirtusMobileAPI.Controllers.MessagesController">
+            <summary>
+            Messages Services to do all actions regarding sending and receving etc.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetInboxMessagesList(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns the all the list of inbox messages corresponding to login user.
+            </summary>
+            <param name="loginUserName"> specify login username</param>
+            <param name="IsUndone">specify which type of message want to return i.e only undone or with done also</param>
+            <param name="IsCanViewProject"> specify can user has project view right</param>
+            <param name="IsCanViewTask"></param>
+            <param name="IsAllMessages">specify has to show all messages</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetSentMessagesList(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns all the list of sent itmes corresponding to login user
+            </summary>
+            <param name="loginUserName"></param>
+            <param name="IsCanViewProject"></param>
+            <param name="IsCanViewTask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetMessageDetails(System.Int32,System.String)">
+            <summary>
+            Returns the message details
+            </summary>
+            <param name="messageId">specify the message id</param>
+            <param name="loginUserName">specify the login username</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetUsers(System.String,System.Int32)">
+            <summary>
+            Returns the all the users to whom the messages have to send.
+            </summary>
+            <param name="loginUserName">specify login username</param>
+            <param name="noOfRecords">specify how many records would be display.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetUsGetReplyAllPersonNames(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Returns all the persons, organization names (separated with coma(',')) involved in current message.
+            </summary>
+            <param name="messageId">specify messageid</param>
+            <param name="loginUserId">specify loginId</param>
+            <param name="IsIncludeSender">specify true if need to include the sender in the list else false.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetReplyAllIds(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Returns all the persons, organization ids and names involved in current message.
+            </summary>
+            <param name="messageId">specify messageid</param>
+            <param name="loginUserId">specify loginId</param>
+            <param name="IsIncludeSender">specify true if need to include the sender in the list else false.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetInternalOrganizations(System.Boolean)">
+            <summary>
+            Returns the list of Internal Organizations
+            </summary>
+            <param name="IsParentRequired">Specify if you want to include parent organizaions also.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetReceipientNames(System.Int32)">
+            <summary>
+            Returns the list of Recipients names 
+            </summary>
+            <param name="messageId">specify messageid</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetUnreadMeassagesCount(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns the UnRead messages Count
+            </summary>
+            <param name="loginUserName">specify login UserName</param>
+            <param name="IsCanViewProject">specify can view project </param>
+            <param name="IsCanViewTask">specify can view task</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.GetReceipientNames(System.Int32,System.Int32)">
+            <summary>
+            Returns the object Status
+            </summary>
+            <param name="objectTypeId"> Object Type Id</param>
+            <param name="recordId">object id or record Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.SendMessage(System.Int32,VirtusMobileAPI.Models.MessageActionData)">
+            <summary>
+            Message Details have to specify to whom the message should be sent.
+            </summary>
+            <param name="messageId">specify message id for new message it should be -0 </param>
+            <param name="messageDetails">specify the message details (MessageActionData type) with following properties.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.SetMessageReadStatus(System.Int32,System.String,System.Boolean)">
+            <summary>
+            Sets the Read Status of the Message from UnRead to Read vice versa.
+            </summary>
+            <param name="messageId">specify the message id</param>
+            <param name="loginUserName">specify the login username</param>
+            <param name="IsReaded">specify true if status has to set reader else false</param>
+            <returns></returns>
+        </member>
         <member name="T:VirtusMobileAPI.Controllers.PerformanceController">
             <summary>
             Timesheet Services to do all actions related to persons services/expances of particular project or Task.
@@ -603,6 +717,104 @@
             <summary>
             Retruns the list of products in which expenses would be done
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetPerformanceOnServices(System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Returns the specified record performance i.e services 
+            </summary>
+            <param name="objectType"> specify object type like Project = 1,Task = 2 </param>
+            <param name="recordId"> specify record id of particular object type </param>
+            <param name="IsShowSubObjects"> specify Is also have to show sub objects </param>
+            <param name="IsShowBilled"> specify is need to show billed records also </param>
+            <param name="IsCanView"> specify is have view right for particular object Type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetPerformanceOnExpances(System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+             Returns the specified record performance i.e Expances 
+            </summary>
+            <param name="objectType">specify object type like Project = 1,Task = 2</param>
+            <param name="recordId"> specify record id of particular object type </param>
+            <param name="IsShowSubObjects"> specify Is also have to show sub objects </param>
+            <param name="IsShowBilled"> specify is need to show billed records also </param>
+            <param name="IsCanView"> specify is have view right for particular object Type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetObjectPerformedByUsers(System.Boolean,System.Int32,System.Int32,System.String)">
+            <summary>
+            Returns the Users with details involoved in Performances (Specific to Object)
+            </summary>
+            <param name="IsExpenses">specify is it expenses or services related</param>
+            <param name="objectType">specify object Type i.e value of  project or task</param>
+            <param name="recordId">specify recordId  </param>
+            <param name="processedByUsers">specify the addresseIds of processed by users if any which are relates to particular project/task separted with coma(',') </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetPerformedByUsers(System.Boolean,System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Returns the users available and performed between the timelines, in any services/expences(this is specific to loginUser not any object)
+            </summary>
+            <param name="IsExpenses">specify is service or expense</param>
+            <param name="fromDate">specify the start time , from the time users available</param>
+            <param name="toDate">specify the end time , up to the time users available</param>
+            <param name="loginUserId">specify the loginUserId details</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetProjectsForPerformance(System.Boolean,System.DateTime,System.DateTime,System.Int32,System.String)">
+            <summary>
+            Returns all the projects avalilable to perform actions i.e to ledger services and expenses
+            </summary>
+            <param name="IsExpenses">specify is service or expense</param>
+            <param name="fromDate">specify the start time , from the time users available</param>
+            <param name="toDate">specify the end time , up to the time users available</param>
+            <param name="loginUserId">specify the loginUserId details</param>
+            <param name="existingUserIds">specify if if any existing users(i.e alredy selected users if any, else pass 0 or empty)</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetTasksForPerformance(System.Boolean,System.DateTime,System.DateTime,System.Int32,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Returns all the tasks avalilable in selected parent project.
+            </summary>
+            <param name="IsExpenses">specify is service or expense</param>
+            <param name="fromDate">specify the start time , from the time users available</param>
+            <param name="toDate">specify the end time , up to the time users available</param>
+            <param name="loginUserId">specify the loginUserId details</param>
+            <param name="existingUserIds">specify if if any existing users</param>
+            <param name="parentProjectId">specify selected parent project id</param>
+            <param name="IsCanViewProject">specify can the login user have project view right</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetPerformanceServices(System.DateTime,System.DateTime,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Returns all the Performanc services between the timeintervals (specific to user not object)
+            </summary>
+            <param name="fromDate">specify fromDate</param>
+            <param name="toDate">specify toDate</param>
+            <param name="loginUserId">specify loginUserId</param>
+            <param name="IsCanViewProject">specify is can view project or not</param>
+            <param name="IsCanViewTask">specify is can view task or not</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.GetPerformanceExpances(System.DateTime,System.DateTime,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Returns all the Performanc Expances between the timeintervals (specific to user not object)
+            </summary>
+            <param name="fromDate">specify fromDate</param>
+            <param name="toDate">specify toDate</param>
+            <param name="loginUserId">specify loginUserId</param>
+            <param name="IsCanViewProject">specify is can view project or not</param>
+            <param name="IsCanViewTask">specify is can view task or not</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.PerformanceController.SavePerformance(System.Int32,System.Boolean,System.Boolean,VirtusMobileAPI.Models.PerformanceActionData)">
+            <summary>
+            Saves the TimeSheet/Performances of the Persons corresponding to project and task.
+            </summary>
+            <param name="loginUserId">Specify the loginUserId details</param>
+            <param name="IsServiceModified">If services have to save in datasource then specify 'True' else 'False'</param>
+            <param name="IsExpancesModified">If expances have to save in datasource then specify 'True' else 'False'</param>
+            <param name="performaanceDetails">Specify the PerformanceActionData which is comination of collection of Expances and collection of Services.</param>
             <returns></returns>
         </member>
         <member name="M:VirtusMobileAPI.Controllers.TenderController.GetDesignTenderConsultants(System.Int32)">
@@ -900,6 +1112,136 @@
         <member name="P:VirtusMobileAPI.Models.TenderLetterActionData.FileContent">
             <summary>
             file content in array of bytes.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.PriorityId">
+            <summary>
+            message prirority i.e high-3,normal-2,low-1
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.UserName">
+            <summary>
+            login username
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.ToPersons">
+            <summary>
+            To persons list separated with comas(',')
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.ToOrganizations">
+            <summary>
+            To Org list separated with comas(',')
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.Subject">
+            <summary>
+            message subject
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.Message">
+            <summary>
+            Message Content or description
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.IsSendEmail">
+            <summary>
+            Have to send mail so true
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.IsSendSMS">
+            <summary>
+            Have to send Sms so true
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.LinkedObjectTypeId">
+            <summary>
+            Object Type which is linked to message if any
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.LinkedObjectId">
+            <summary>
+            Object Id which is linked to message if any 
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.IsReplyToAll">
+            <summary>
+            Is this message replay to all if so true
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.MessageActionData.LinkFileId">
+            <summary>
+            Link file id if any.
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.RecordId">
+            <summary>
+            recordId of the Services record for new record-0
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.Flag">
+            <summary>
+            For new record it must be 'N' otherwise 'M' for deletion 'D'
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.RecType">
+            <summary>
+            To do any actions ie. insertion, updation, deletion RecType is 1 else 0
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.ServiceDate">
+            <summary>
+            service done on the date
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.PerformedBy">
+            <summary>
+            services performed by userId in not userName
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.TimeFrom">
+            <summary>
+            Start time,Time format should be from 01:00 to 24:00
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.TimeUntil">
+            <summary>
+            End tiem,Time format should be from 01:00 to 24:00
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.Effort">
+            <summary>
+            total time served, i.e differences between from and to time ,Time format should be from 01:00 to 24:00
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ServicesActionData.HourlyRate">
+            <summary>
+            hourly rate for the selected user 
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ExpancesActionData.RecordId">
+            <summary>
+            recordId of the Expances record for new record-0
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ExpancesActionData.Flag">
+            <summary>
+            For new record it must be 'N' otherwise 'M' for deletion 'D'
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ExpancesActionData.RecType">
+            <summary>
+            To do any actions ie. insertion, updation, deletion RecType is 1 else 0
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ExpancesActionData.ProductDate">
+            <summary>
+            Expances done on the date
+            </summary>
+        </member>
+        <member name="P:VirtusMobileAPI.Models.ExpancesActionData.PerformedBy">
+            <summary>
+            services performed by userId in not userName
             </summary>
         </member>
     </members>

@@ -369,11 +369,12 @@ namespace VirtusMobileAPI.Controllers
 
         [HttpPost]
         [Route("SaveProcessedBy/{recordId}/{objectType}")]
-        public HttpResponseMessage SaveProjectProcessedBy([FromBody]ProjectTaskProcessedByActionData data, string recordId, int objectType)
+        public HttpResponseMessage SaveProjectProcessedBy(string recordId, int objectType, [FromBody]List<ProjectTaskProcessedByActionData> data)
         {
             try
             {
-                DataTable dt = ConverterHelper.ConvertToDataTable<ProjectTaskProcessedByActionData>(new List<ProjectTaskProcessedByActionData> { data });
+                //DataTable dt = ConverterHelper.ConvertToDataTable<ProjectTaskProcessedByActionData>(new List<ProjectTaskProcessedByActionData> { data });
+                DataTable dt = ConverterHelper.ConvertToDataTable<ProjectTaskProcessedByActionData>(data);
                 var result = processedRepository.SaveTaskProcessedBy(dt, objectType, recordId);
                 return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
             }

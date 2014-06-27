@@ -14,6 +14,20 @@ namespace VirtusBI
 {
     public class clsDocuments : clsBaseBI
     {
+        public DataSet GetFileName(int iFileId)
+        {
+
+            SqlParameter[] Params = new SqlParameter[1];
+            int iIndex = 0;
+
+            Params[iIndex] = new SqlParameter("@FileId", SqlDbType.Int);
+            Params[iIndex].Direction = ParameterDirection.Input;
+            Params[iIndex].Value = iFileId;
+
+            return Common.dbMgr.ExecuteDataSet(CommandType.StoredProcedure, "spGetFileNameDs", Params);
+        }
+
+
         public DataSet fnGetFileDeatils(int iFileId)
         {
             try

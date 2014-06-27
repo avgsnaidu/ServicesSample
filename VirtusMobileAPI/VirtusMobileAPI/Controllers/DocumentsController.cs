@@ -31,6 +31,19 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.GetDocumentTypeList();
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
+        /// <summary>
+        /// Returns the just file Name of the File.
+        /// </summary>
+        /// <param name="fileId">specify the fileId</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetFileName/{fileId}")]
+        public HttpResponseMessage GetFileName(int fileId)
+        {
+            var result = repository.GetFileName(fileId);
+            return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
+        }
+
 
         /// <summary>
         /// Get the single document information

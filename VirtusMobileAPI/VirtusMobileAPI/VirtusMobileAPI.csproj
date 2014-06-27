@@ -166,6 +166,7 @@
     <Compile Include="Controllers\ContractController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\ProjectTaskController.cs" />
     <Compile Include="Controllers\TenderController.cs" />
@@ -175,6 +176,8 @@
     </Compile>
     <Compile Include="Models\ConverterHelper.cs" />
     <Compile Include="Models\DocumentModel.cs" />
+    <Compile Include="Models\MessagesModel.cs" />
+    <Compile Include="Models\PerformanceModel.cs" />
     <Compile Include="Models\UnhandledExceptionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
