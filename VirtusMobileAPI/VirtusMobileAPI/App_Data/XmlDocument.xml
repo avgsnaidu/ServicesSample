@@ -481,6 +481,52 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:VirtusMobileAPI.Controllers.AppointmentController">
+            <summary>
+            Services for adding or viewing an appointment.
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.AppointmentController.GetAppointmentsList(System.String,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Returns all the appointments list.
+            </summary>
+            <param name="loginUserName">specify login username</param>
+            <param name="IsUndone">specify is done or undone records to fetch</param>
+            <param name="IsAllAppointments">specify is need to display all apointments or not</param>
+            <param name="period">specify the period of time, i.e like for   All = 0,Today = 1,ThisWeek = 2,ThisMonth = 3,ThisYear = 4 </param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.AppointmentController.GetAppointmentDetails(System.String,System.Int32)">
+            <summary>
+            Returns appointment details 
+            </summary>
+            <param name="loginUserName">specify login username</param>
+            <param name="appointmentId">specify appointment id</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.AppointmentController.GetAppointmentOccurrenceDetails(System.Int32)">
+            <summary>
+            Returns the all the appointment occurrence details.
+            </summary>
+            <param name="occurrSeriesId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.AppointmentController.GetUsers(System.Int32)">
+            <summary>
+            Returns the available persons to fill in appointment persons list.
+            </summary>
+            <param name="noOfRecords">specify how many records to fetch</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.AppointmentController.SaveAppointment(System.Int32,System.String,VirtusMobileAPI.Models.AppointmentActionData)">
+            <summary>
+            Saves the appointment
+            </summary>
+            <param name="appointmentId">specify 0 for new appointment</param>
+            <param name="loginUserName"> login username </param>
+            <param name="appointmentDetails">specify the AppointmentActionData type data.</param>
+            <returns></returns>
+        </member>
         <member name="M:VirtusMobileAPI.Controllers.ContractController.GetMyContractsList(System.String,System.Boolean,System.Boolean)">
             <summary>
             Returns records related/specific to loginUser with done or processed filter.
@@ -685,14 +731,6 @@
             <param name="recordId">object id or record Id</param>
             <returns></returns>
         </member>
-        <member name="M:VirtusMobileAPI.Controllers.MessagesController.SendMessage(System.Int32,VirtusMobileAPI.Models.MessageActionData)">
-            <summary>
-            Message Details have to specify to whom the message should be sent.
-            </summary>
-            <param name="messageId">specify message id for new message it should be -0 </param>
-            <param name="messageDetails">specify the message details (MessageActionData type) with following properties.</param>
-            <returns></returns>
-        </member>
         <member name="M:VirtusMobileAPI.Controllers.MessagesController.SetMessageReadStatus(System.Int32,System.String,System.Boolean)">
             <summary>
             Sets the Read Status of the Message from UnRead to Read vice versa.
@@ -700,6 +738,14 @@
             <param name="messageId">specify the message id</param>
             <param name="loginUserName">specify the login username</param>
             <param name="IsReaded">specify true if status has to set reader else false</param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.MessagesController.SendMessage(System.Int32,VirtusMobileAPI.Models.MessageActionData)">
+            <summary>
+            Message Details have to specify to whom the message should be sent.
+            </summary>
+            <param name="messageId">specify message id for new message it should be -0 </param>
+            <param name="messageDetails">specify the message details (MessageActionData type) with following properties.</param>
             <returns></returns>
         </member>
         <member name="T:VirtusMobileAPI.Controllers.PerformanceController">

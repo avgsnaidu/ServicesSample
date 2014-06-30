@@ -3,6 +3,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
+using EPMEnums;
 using VirtusDB;
 
 namespace VirtusBI
@@ -646,154 +647,154 @@ namespace VirtusBI
         //    return sSql;
         //}
 
-        //public static void GetRemindPeriod(Enums.Remind_Durations dur, ref string sPeriodType, ref int iPeriodValue)
-        //{
-        //    if (dur == Enums.Remind_Durations.Minute_1)
-        //    {
-        //        sPeriodType = "mi";
-        //        iPeriodValue = -1;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Minutes_5)
-        //    {
-        //        sPeriodType = "mi";
-        //        iPeriodValue = -5;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Minutes_10)
-        //    {
-        //        sPeriodType = "mi";
-        //        iPeriodValue = -10;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Minutes_15)
-        //    {
-        //        sPeriodType = "mi";
-        //        iPeriodValue = -15;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Minutes_30)
-        //    {
-        //        sPeriodType = "mi";
-        //        iPeriodValue = -30;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hour_1)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -1;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_2)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -2;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_3)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -3;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_4)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -4;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_5)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -5;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_6)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -6;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_7)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -7;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_8)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -8;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_9)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -9;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_10)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -10;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_11)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -11;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_12)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -12;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Hours_18)
-        //    {
-        //        sPeriodType = "hh";
-        //        iPeriodValue = -18;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Day_1)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -1;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Days_2)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -2;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Days_3)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -3;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Days_4)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -4;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Days_5)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -5;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Days_6)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -6;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Week_1)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = -7;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Weeks_2)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = 2 * -7;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Weeks_3)
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = 3 * -7;
-        //    }
-        //    else if (dur == Enums.Remind_Durations.Month_1)
-        //    {
-        //        sPeriodType = "mm";
-        //        iPeriodValue = -1;
-        //    }
-        //    else
-        //    {
-        //        sPeriodType = "dd";
-        //        iPeriodValue = 0;
-        //    }
-        //}
+        public static void GetRemindPeriod(Enums.Remind_Durations dur, ref string sPeriodType, ref int iPeriodValue)
+        {
+            if (dur == Enums.Remind_Durations.Minute_1)
+            {
+                sPeriodType = "mi";
+                iPeriodValue = -1;
+            }
+            else if (dur == Enums.Remind_Durations.Minutes_5)
+            {
+                sPeriodType = "mi";
+                iPeriodValue = -5;
+            }
+            else if (dur == Enums.Remind_Durations.Minutes_10)
+            {
+                sPeriodType = "mi";
+                iPeriodValue = -10;
+            }
+            else if (dur == Enums.Remind_Durations.Minutes_15)
+            {
+                sPeriodType = "mi";
+                iPeriodValue = -15;
+            }
+            else if (dur == Enums.Remind_Durations.Minutes_30)
+            {
+                sPeriodType = "mi";
+                iPeriodValue = -30;
+            }
+            else if (dur == Enums.Remind_Durations.Hour_1)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -1;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_2)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -2;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_3)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -3;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_4)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -4;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_5)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -5;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_6)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -6;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_7)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -7;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_8)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -8;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_9)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -9;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_10)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -10;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_11)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -11;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_12)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -12;
+            }
+            else if (dur == Enums.Remind_Durations.Hours_18)
+            {
+                sPeriodType = "hh";
+                iPeriodValue = -18;
+            }
+            else if (dur == Enums.Remind_Durations.Day_1)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -1;
+            }
+            else if (dur == Enums.Remind_Durations.Days_2)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -2;
+            }
+            else if (dur == Enums.Remind_Durations.Days_3)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -3;
+            }
+            else if (dur == Enums.Remind_Durations.Days_4)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -4;
+            }
+            else if (dur == Enums.Remind_Durations.Days_5)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -5;
+            }
+            else if (dur == Enums.Remind_Durations.Days_6)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -6;
+            }
+            else if (dur == Enums.Remind_Durations.Week_1)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = -7;
+            }
+            else if (dur == Enums.Remind_Durations.Weeks_2)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = 2 * -7;
+            }
+            else if (dur == Enums.Remind_Durations.Weeks_3)
+            {
+                sPeriodType = "dd";
+                iPeriodValue = 3 * -7;
+            }
+            else if (dur == Enums.Remind_Durations.Month_1)
+            {
+                sPeriodType = "mm";
+                iPeriodValue = -1;
+            }
+            else
+            {
+                sPeriodType = "dd";
+                iPeriodValue = 0;
+            }
+        }
 
         #endregion
 

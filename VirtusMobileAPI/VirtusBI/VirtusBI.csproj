@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsAddresses.cs" />
+    <Compile Include="clsAppointments.cs" />
     <Compile Include="clsBaseBI.cs" />
     <Compile Include="clsCodeGenaration.cs" />
     <Compile Include="clsContracts.cs" />
