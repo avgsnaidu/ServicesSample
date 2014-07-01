@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using EPMEnums;
 using VirtusDataModel;
+ 
 
 namespace VirtusBI
 {
-    public class clsDesignTenders:clsBaseBI
+    public class clsDesignTenders : clsBaseBI
     {
 
 
@@ -503,7 +504,7 @@ namespace VirtusBI
             }
         }
 
-      
+
 
         public NextObjectRecordDetails fnGetObjectRecordId(int iRecordId, int iObjectEnumId)
         {
@@ -608,7 +609,7 @@ namespace VirtusBI
             try
             {
                 int iTotCount = 0;
-                return GetListViewDataSet(sWhereCondition, "",1000, "19", "DESC", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
+                return GetListViewDataSet(sWhereCondition, "", 1000, "19", "DESC", sLoginUserName, ref iTotCount, bIsDesign, bUnDone);
             }
             catch (Exception ex)
             {

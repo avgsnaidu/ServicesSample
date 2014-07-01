@@ -863,6 +863,31 @@
             <param name="performaanceDetails">Specify the PerformanceActionData which is comination of collection of Expances and collection of Services.</param>
             <returns></returns>
         </member>
+        <member name="T:VirtusMobileAPI.Controllers.SchedularController">
+            <summary>
+            Services for Schedular objects to display
+            </summary>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.SchedularController.GetSchedularAppointments(System.String,System.String,System.String,System.String,System.DateTime,System.DateTime,System.Boolean)">
+            <summary>
+            Returns all the appointments related to object and user specific.
+            </summary>
+            <param name="loginUserName"></param>
+            <param name="personsAddresseIds"></param>
+            <param name="OrgnizationIds"></param>
+            <param name="ObjectTypeIds"></param>
+            <param name="FromDate"></param>
+            <param name="ToDate"></param>
+            <param name="IsCanViewProject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtusMobileAPI.Controllers.SchedularController.GetPersonNames(System.String)">
+            <summary>
+            Returns persons names by specifing the id's
+            </summary>
+            <param name="personsAddresseIds"></param>
+            <returns></returns>
+        </member>
         <member name="M:VirtusMobileAPI.Controllers.TenderController.GetDesignTenderConsultants(System.Int32)">
             <summary>
             Get all the tender Consultants of the Tender by providing the Tender Id

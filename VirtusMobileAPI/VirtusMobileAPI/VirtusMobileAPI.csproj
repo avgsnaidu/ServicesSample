@@ -170,6 +170,7 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\ProjectTaskController.cs" />
+    <Compile Include="Controllers\SchedularController.cs" />
     <Compile Include="Controllers\TenderController.cs" />
     <Compile Include="Controllers\UserRequestController.cs" />
     <Compile Include="Global.asax.cs">

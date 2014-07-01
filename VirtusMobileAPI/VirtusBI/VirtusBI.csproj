@@ -65,6 +65,7 @@
     <Compile Include="clsMessages.cs" />
     <Compile Include="clsPerformance.cs" />
     <Compile Include="clsProjectTask.cs" />
+    <Compile Include="clsSchedular.cs" />
     <Compile Include="clsUserRequests.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
