@@ -183,7 +183,7 @@ namespace VirtusMobileAPI.Controllers
             var result = repository.fnGetPreformanceExpensesDataSet(fromDate, toDate, loginUserId, IsCanViewProject, IsCanViewTask);
             return Request.CreateResponse(HttpStatusCode.OK, result, Configuration.Formatters.JsonFormatter);
         }
-
+          
         /// <summary>
         /// Saves the TimeSheet/Performances of the Persons corresponding to project and task.
         /// </summary>
